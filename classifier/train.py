@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
@@ -5,7 +6,11 @@ import tensorflow as tf
 from tensorflow import keras
 
 DATA_PATH = "data_10.npz"
-OUTPUT_FILE = "model.keras"
+OUTPUT_FOLDER = "flask"
+OUTPUT_FILE = os.path.join(OUTPUT_FOLDER, "model.keras")
+# Ensure the folder exists
+os.makedirs(OUTPUT_FOLDER, exist_ok=True)
+
 L2_REG = 0.01
 EPOCHS = 40
 BATCH_SIZE = 32
@@ -183,6 +188,7 @@ def main():
 
     # save model
     model.save(OUTPUT_FILE)
+    print(f"Model saved to {OUTPUT_FILE}")
 
 if __name__ == "__main__":
     main()
