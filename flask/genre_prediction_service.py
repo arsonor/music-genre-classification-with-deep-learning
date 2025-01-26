@@ -99,16 +99,16 @@ if __name__ == "__main__":
 
     # make predictions
     file_paths = [
-        "./test/blues.00000.wav",
-        "./test/classical.00000.wav",
-        "./test/country.00000.wav",
-        "./test/disco.00000.wav",
-        "./test/hiphop.00000.wav",
-        "./test/jazz.00000.wav",
-        "./test/metal.00000.wav",
-        "./test/pop.00000.wav",
-        "./test/reggae.00000.wav",
-        "./test/rock.00000.wav"
+        "../test/blues.00000.wav",
+        "../test/classical.00000.wav",
+        "../test/country.00000.wav",
+        "../test/disco.00000.wav",
+        "../test/hiphop.00000.wav",
+        "../test/jazz.00000.wav",
+        "../test/metal.00000.wav",
+        "../test/pop.00000.wav",
+        "../test/reggae.00000.wav",
+        "../test/rock.00000.wav"
     ]
 
     for file_path in file_paths:
