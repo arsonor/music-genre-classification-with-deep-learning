@@ -51,7 +51,7 @@ Audio features derived from the dataset. Features are computed for both 30-secon
 
 These diverse data formats make the dataset a robust choice for exploring multiple classification approaches. However, in the purpose of this project, I chose to focus only on the audio files in the folder 'genres original'.
 
-The audio files are processed to extract **MFCC features (this audio feature is explained in the [`eda.ipynb`](notebooks/eda.ipynb) notebook)** and segment the 30-second audio files into 3-second clips for model training.
+The audio files are processed to extract **MFCC features (this audio feature is explained in the [`EDA.ipynb`](notebooks/EDA.ipynb) notebook)** and segment the 30-second audio files into 3-second clips for model training.
 
 ### Practical Applications
 
@@ -213,7 +213,7 @@ They are in the [`notebooks`](notebooks/) folder.
 
 ### **1. Exploratory Data Analysis (EDA)**
 
-[`eda.ipynb`](notebooks/eda.ipynb)
+[`EDA.ipynb`](notebooks/EDA.ipynb)
 - Download the dataset from Kaggle.
 
 - Analyze class distribution and dataset balance.
