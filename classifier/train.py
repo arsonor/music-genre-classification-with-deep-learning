@@ -6,7 +6,7 @@ import tensorflow as tf
 from tensorflow import keras
 
 DATA_PATH = "data_10.npz"
-OUTPUT_FOLDER = "flask"
+OUTPUT_FOLDER = "../flask"
 OUTPUT_FILE = os.path.join(OUTPUT_FOLDER, "model.keras")
 # Ensure the folder exists
 os.makedirs(OUTPUT_FOLDER, exist_ok=True)
