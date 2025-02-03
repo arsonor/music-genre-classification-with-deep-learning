@@ -8,8 +8,7 @@
 
 - [Overview](#overview)
 - [Problem Statement](#problem-statement)
-- [Installation](#installation)
-- [Usage](#usage)
+- [Installation and Usage Guide](#installation-and-usage-guide)
 - [Details on the Code](#details-on-the-code)
 - [Notebooks](#notebooks)
   - [EDA (Handling Audio Data)](#1-exploratory-data-analysis-eda)
@@ -68,7 +67,7 @@ The audio files are processed to extract **MFCC features (this audio feature is 
 - Educational Platforms: Aid in music education by categorizing and recommending tracks for learning.
 
 
-## Installation
+## Installation and Usage Guide
 
 ### 🔹 Prerequisites
 - Python 3.11+
@@ -81,6 +80,10 @@ The audio files are processed to extract **MFCC features (this audio feature is 
 git clone https://github.com/arsonor/music-genre-classification-with-deep-learning
 cd music-genre-classification-with-deep-learning
 ```
+
+You can run the app with one of the two methods:
+- locally
+- with Docker
 
 ### 🚀 **1. Run the App Locally**
 
@@ -167,7 +170,7 @@ This will:
 Like before, check the url in the client.py file. It should be:  
  **URL = "http://127.0.0.1:80/predict"**
 
-And run the script:
+And on a new terminal, run the script:
 
   ```sh
   python client.py
