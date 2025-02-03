@@ -70,66 +70,64 @@ The audio files are processed to extract **MFCC features (this audio feature is 
 
 ## Installation
 
-### 1. Clone the repository (or use a Github Codespace)
+### 🔹 Prerequisites
+- Python 3.11+
+- Pip (python package manager)
+- For Docker setup: Docker and Docker Compose installed
+
+### 🔹Clone the repository (or use a Github Codespace)
 
 ```sh
 git clone https://github.com/arsonor/music-genre-classification-with-deep-learning
 cd music-genre-classification-with-deep-learning
 ```
 
-### 2. Create a Virtual Environment
+### 🚀 **1. Run the App Locally**
 
-#### 1. Create a virtual environment using Python:
+#### 📦 Step 1: Create a Virtual Environment
+  ```sh
+  python -m venv venv
+  ```
 
-```sh
-python -m venv venv
-```
-
-#### 2. Activate the virtual environment:
-
+#### ✅ Step 2: Activate the virtual environment:
+- On macOS/Linux:  
+  ```sh
+  source venv/bin/activate
+  ```
+- On Windows (Git Bash):  
+  ```sh
+  source venv/Scripts/activate
+  ```
 - On Windows (Command Prompt):  
   ```sh
   venv\Scripts\activate
   ```
 
-- On Windows (Git Bash):  
-  ```sh
-  source venv/Scripts/activate
-  ```
-
-- On macOS/Linux:  
-  ```sh
-  source venv/bin/activate
-  ```
-
-### 3. Install Dependencies
-
+#### 📥 Step 3: Install Dependencies
 Install the required Python packages using the `requirements.txt` file (it may take a few minutes):
 ```sh
-pip install -r flask/requirements.txt
+cd flask
+pip install -r requirements.txt
 ```
 
-### 4. Run Docker
-
-Start the Flask API and Nginx server using Docker Compose:
+#### ▶ Step 4: Run the Flask Server
 ```sh
-docker-compose up --build
+python server.py
 ```
+The Flask server may be running on http://127.0.0.1:5000.
 
 
-## Usage
-
-**To test the app:**
+#### 🎧 Step 5: Test the App
 
 1. Place your audio file in the appropriate directory.
 
 2. Update the client.py file with the correct server URL and file path:
     ```sh
-    URL = "http://127.0.0.1:5050/predict"
+    URL = "http://127.0.0.1:5000/predict"
     FILE_PATH = "test/blues.00000.wav"
     ```
 
-3. Run the client script:
+3. From a new terminal instance (and from the root folder), run the client script:
     ```sh
     python client.py
     ```
@@ -139,25 +137,52 @@ docker-compose up --build
     { "genre": "blues" }
     ```
 
+#### ▶ Optionally: Test the training & model saving and the prediction service
 
-**To test the training & model saving or the prediction service:**
+  - Run the train script:
+    ```sh
+    cd classifier
+    python train.py
+    ```
 
-Run the train script:
+- Run the prediction service (the file let you test the predictions on an audio file for each genre in the test folder):
+    ```sh
+    cd ../flask
+    python genre_prediction_service.py
+    ```
+
+### 🐳 **2. Run with Docker Compose**
+
+#### 📥 Step 1: Build & Start the Containers
+
+Start the Flask API and Nginx server using Docker Compose:
+```sh
+docker-compose up --build
+```
+This will:  
+✅ Start the Flask app (on port 5050)  
+✅ Start the Nginx reverse proxy (on port 80)
+
+#### 🎧 Step 2: Test the App
+Like before, check the url in the client.py file. It should be:  
+ **URL = "http://127.0.0.1:80/predict"**
+
+And run the script:
+
   ```sh
-  cd classifier
-  python train.py
+  python client.py
+  ```
+  Or manually send a request:
+
+  ```sh
+  curl -X POST -F "file=@test/blues.00000.wav" http://127.0.0.1:80/predict
   ```
 
-Run the prediction service (the file let you test the predictions on an audio file for each genre in the test folder):
+#### Step 3: Stop the service
+
   ```sh
-  cd ..
-  cd flask
-  python genre_prediction_service.py
+  docker-compose down
   ```
-
-
-
-
 
 ## Details on the Code
 
