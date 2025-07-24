@@ -8,6 +8,7 @@ services:
       - "5050"
     environment:
       - FLASK_ENV=production
+      - MLFLOW_TRACKING_URI=http://host.docker.internal:5000
 
   nginx:
     build: ./nginx

@@ -1,11 +1,14 @@
 import librosa
-import tensorflow as tf
 import numpy as np
+import os
+import mlflow
+from mlflow import MlflowClient
 
-SAVED_MODEL_PATH = "model.keras"
+
 SAMPLE_RATE = 22050
 TEST_DURATION = 3 # measured in seconds
 SAMPLES_TO_CONSIDER = SAMPLE_RATE * TEST_DURATION
+MODEL_NAME = "music_genre_tf_model"
 
 class _Genre_Prediction_Service:
     """Singleton class for genre prediction inference with trained models.
@@ -70,7 +73,10 @@ class _Genre_Prediction_Service:
             # extract MFCCs
             MFCCs = librosa.feature.mfcc(y=signal, sr=sample_rate, n_mfcc=num_mfcc, n_fft=n_fft,
                                          hop_length=hop_length)
-        return MFCCs.T
+            return MFCCs.T
+        else:
+            raise ValueError("Audio signal too short for processing.")
+
 
 
 def Genre_Prediction_Service():
@@ -81,8 +87,19 @@ def Genre_Prediction_Service():
 
     # ensure an instance is created only the first time the factory function is called
     if _Genre_Prediction_Service._instance is None:
+        print("Loading latest MLflow model from registry...")
+        mlflow.set_tracking_uri(os.environ.get("MLFLOW_TRACKING_URI", "http://localhost:5000"))
+        client = MlflowClient()
+        versions = client.search_model_versions(f"name='{MODEL_NAME}'")
+        latest_version = max(versions, key=lambda v: int(v.version))
+        model_uri = f"models:/{MODEL_NAME}/{latest_version.version}"
+        model = mlflow.keras.load_model(model_uri)
+
+        print(f"Model loaded: version {latest_version.version}")
+
         _Genre_Prediction_Service._instance = _Genre_Prediction_Service()
-        _Genre_Prediction_Service.model = tf.keras.models.load_model(SAVED_MODEL_PATH)
+        _Genre_Prediction_Service.model = model
+        
     return _Genre_Prediction_Service._instance
 
 

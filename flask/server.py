@@ -36,4 +36,5 @@ def predict():
 
 
 if __name__ == "__main__":
+    print("Starting genre prediction service...")
     app.run(debug=False)
