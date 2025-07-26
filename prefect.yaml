@@ -1,0 +1,15 @@
+name: music-genre-classification
+prefect-version: 2.20.19
+
+deployments:
+  - name: music_genre_deployment
+    flow_name: music_genre_pipeline
+    entrypoint: classifier/prefect_flow.py:music_genre_pipeline
+    work_pool:
+      name: default-agent-pool
+      work_queue_name: default
+      job_variables: {}
+    tags:
+      - training
+      - mlflow
+    schedule: null

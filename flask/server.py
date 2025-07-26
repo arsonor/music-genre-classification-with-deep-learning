@@ -1,6 +1,6 @@
 import random
 import os
-from datetime import datetime, timezone
+# from datetime import datetime, timezone
 import pandas as pd
 from flask import Flask, request, jsonify
 from genre_prediction_service import Genre_Prediction_Service
@@ -26,7 +26,7 @@ def predict():
     audio_file.save(file_name)
 
     # Extract optional actual label
-    actual_genre = request.form.get("actual_genre", default=None)
+    # actual_genre = request.form.get("actual_genre", default=None)
 
     # Instantiate genre prediction service singleton
     gps = Genre_Prediction_Service()
@@ -44,8 +44,8 @@ def predict():
     col_names = [f"mfcc_{i+1}" for i in range(13)]
     df_row = pd.DataFrame([mfcc_vector], columns=col_names)
     df_row["predicted_genre"] = predicted_genre
-    df_row["actual_genre"] = actual_genre
-    df_row["timestamp"] = datetime.now(timezone.utc).isoformat()
+    # df_row["actual_genre"] = actual_genre
+    # df_row["timestamp"] = datetime.now(timezone.utc).isoformat()
 
     # Append to current.parquet (create if not exists)
     os.makedirs(os.path.dirname(CURRENT_PARQUET_PATH), exist_ok=True)
