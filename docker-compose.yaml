@@ -9,6 +9,8 @@ services:
     environment:
       - FLASK_ENV=production
       - MLFLOW_TRACKING_URI=http://host.docker.internal:5000
+    volumes:
+      - ./monitoring/data:/app/monitoring/data
 
   nginx:
     build: ./nginx
@@ -18,3 +20,35 @@ services:
       - "80:80"  # Expose Nginx to host
     depends_on:
       - flask  # Ensure Flask starts before Nginx
+
+  monitoring:
+    build:
+      context: ./monitoring
+    container_name: monitoring
+    restart: always
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/data:/app/monitoring/data
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    restart: always
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+    ports:
+      - "9091:9090"
+    depends_on:
+      - monitoring
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus

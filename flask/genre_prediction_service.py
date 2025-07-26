@@ -76,6 +76,14 @@ class _Genre_Prediction_Service:
             return MFCCs.T
         else:
             raise ValueError("Audio signal too short for processing.")
+        
+        
+    def extract_mean_mfcc(self, file_path, n_mfcc=13, n_fft=2048, hop_length=512):
+        """Extracts and returns the mean MFCC vector (13 values) from the audio file."""
+        signal, sr = librosa.load(file_path, sr=22050)
+        mfcc = librosa.feature.mfcc(y=signal, sr=sr, n_mfcc=n_mfcc, n_fft=n_fft, hop_length=hop_length)
+        mfcc_mean = np.mean(mfcc, axis=1)
+        return mfcc_mean
 
 
 
