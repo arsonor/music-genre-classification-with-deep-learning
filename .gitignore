@@ -170,7 +170,7 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 
-*.json
+data_10.json
 
 mlruns/
 artifacts/

@@ -23,7 +23,7 @@ def train_and_log_model(file_path):
     MODEL_NAME  = cfg["registered_model_name"]
     params      = cfg["training"]
 
-    mlflow.set_tracking_uri("http://localhost:5000")
+    mlflow.set_tracking_uri("http://mlflow:5000")
     mlflow.set_experiment(EXP_NAME)
 
     X_train, y_train, X_val, y_val, X_test, y_test = prepare_dataset(file_path)

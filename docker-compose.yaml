@@ -1,36 +1,116 @@
 services:
 
-  flask:
-    build: ./flask
-    container_name: flask
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile.api
+    container_name: api
     restart: always
     expose:
       - "5050"
     environment:
-      - FLASK_ENV=production
+      - API_ENV=production
       - MLFLOW_TRACKING_URI=http://host.docker.internal:5000
     volumes:
       - ./monitoring/data:/app/monitoring/data
 
   nginx:
-    build: ./nginx
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile.nginx
     container_name: nginx
     restart: always
     ports:
       - "80:80"  # Expose Nginx to host
     depends_on:
-      - flask  # Ensure Flask starts before Nginx
+      - api  # Ensure API starts before Nginx
+      
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:v2.22.0
+    command: >
+      mlflow server
+      --backend-store-uri /mlflow/mlruns
+      --artifacts-destination /mlflow/artifacts
+      --serve-artifacts
+      --host 0.0.0.0
+      --port 5000
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./mlruns:/mlflow/mlruns
+      - ./artifacts:/mlflow/artifacts
+    environment:
+      - MLFLOW_TRACKING_URI=http://mlflow:5000
+  
+  postgres:
+    image: postgres:15
+    container_name: prefect-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: prefect
+      POSTGRES_PASSWORD: prefect
+      POSTGRES_DB: prefect
+    volumes:
+      - prefect_pg_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U prefect -d prefect"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  prefect-server:
+    image: prefecthq/prefect:2.20-python3.10
+    container_name: prefect-server
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PREFECT_API_DATABASE_CONNECTION_URL: postgresql+asyncpg://prefect:prefect@postgres:5432/prefect
+    command: >
+      prefect server start --host 0.0.0.0 --port 4200
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./prefect:/root/.prefect
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:4200/api/health')\""]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  prefect-worker:
+    build:
+      context: ./classifier
+      dockerfile: Dockerfile.prefect
+    container_name: prefect-worker
+    depends_on:
+      prefect-server:
+        condition: service_healthy
+    environment:
+      PREFECT_API_URL: http://prefect-server:4200/api
+      MLFLOW_TRACKING_URI: http://mlflow:5000
+      PYTHONPATH: /app
+    command: >
+      prefect worker start --pool default-agent-pool
+    volumes:
+      - .:/app
 
   monitoring:
     build:
       context: ./monitoring
+      dockerfile: Dockerfile.monitoring
     container_name: monitoring
     restart: always
     ports:
       - "9090:9090"
     volumes:
       - ./monitoring/data:/app/monitoring/data
-
+    environment:
+      - MONITORING_INTERVAL_SECONDS=300
+      - PROMETHEUS_PORT=9090
+  
   prometheus:
     image: prom/prometheus
     container_name: prometheus
@@ -52,3 +132,10 @@ services:
       - "3000:3000"
     depends_on:
       - prometheus
+    volumes:
+    - ./monitoring/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
+    - ./monitoring/grafana/provisioning/dashboards/json:/etc/grafana/provisioning/dashboards/json
+    - ./monitoring/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+
+volumes:
+  prefect_pg_data:

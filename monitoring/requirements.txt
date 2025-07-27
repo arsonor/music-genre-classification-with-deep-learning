@@ -1,0 +1,4 @@
+pandas==2.3.1
+Flask==3.1.0
+evidently==0.7.11
+pyarrow
