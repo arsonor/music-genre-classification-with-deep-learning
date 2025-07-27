@@ -1,0 +1,14 @@
+aliases: []
+creation_timestamp: 1753632876706
+current_stage: None
+description: ''
+last_updated_timestamp: 1753632876706
+name: music_genre_tf_model
+run_id: 71f08c433cec4d0a88145183bb45b635
+run_link: ''
+source: mlflow-artifacts:/600034235867502708/71f08c433cec4d0a88145183bb45b635/artifacts/model
+status: READY
+status_message: null
+storage_location: mlflow-artifacts:/600034235867502708/71f08c433cec4d0a88145183bb45b635/artifacts/model
+user_id: null
+version: 4

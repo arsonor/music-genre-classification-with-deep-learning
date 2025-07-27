@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/600034235867502708/484786eba7db4c6a95e8a15da9bc3698/artifacts
+end_time: 1753563410033
+entry_point_name: ''
+experiment_id: '600034235867502708'
+lifecycle_stage: active
+run_id: 484786eba7db4c6a95e8a15da9bc3698
+run_name: debonair-owl-300
+run_uuid: 484786eba7db4c6a95e8a15da9bc3698
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1753563342811
+status: 3
+tags: []
+user_id: marti

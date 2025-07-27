@@ -172,5 +172,4 @@ cython_debug/
 
 data_10.json
 
-mlruns/
-artifacts/
+
