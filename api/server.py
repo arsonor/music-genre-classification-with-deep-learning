@@ -26,7 +26,7 @@ def predict():
     audio_file.save(file_name)
 
     # Extract optional actual label
-    # actual_genre = request.form.get("actual_genre", default=None)
+    actual_genre = request.form.get("actual_genre", default=None)
 
     # Instantiate genre prediction service singleton
     gps = Genre_Prediction_Service()
@@ -44,14 +44,14 @@ def predict():
     col_names = [f"mfcc_{i+1}" for i in range(13)]
     df_row = pd.DataFrame([mfcc_vector], columns=col_names)
     df_row["predicted_genre"] = predicted_genre
-    # df_row["actual_genre"] = actual_genre
+    df_row["actual_genre"] = actual_genre
     # df_row["timestamp"] = datetime.now(timezone.utc).isoformat()
 
     # Append to current.parquet (create if not exists)
     os.makedirs(os.path.dirname(CURRENT_PARQUET_PATH), exist_ok=True)
     if os.path.exists(CURRENT_PARQUET_PATH):
-        df_existing = pd.read_parquet(CURRENT_PARQUET_PATH)
-        df_combined = pd.concat([df_existing, df_row], ignore_index=True)
+       df_existing = pd.read_parquet(CURRENT_PARQUET_PATH)
+       df_combined = pd.concat([df_existing, df_row], ignore_index=True)
     else:
         df_combined = df_row
 

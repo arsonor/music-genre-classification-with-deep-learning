@@ -10,7 +10,7 @@ services:
       - "5050"
     environment:
       - API_ENV=production
-      - MLFLOW_TRACKING_URI=http://host.docker.internal:5000
+      - MLFLOW_TRACKING_URI=http://mlflow:5000
     volumes:
       - ./monitoring/data:/app/monitoring/data
 

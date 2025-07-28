@@ -171,5 +171,5 @@ cython_debug/
 .pypirc
 
 data_10.json
-
+genres/
 

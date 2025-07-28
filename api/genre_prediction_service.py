@@ -96,7 +96,7 @@ def Genre_Prediction_Service():
     # ensure an instance is created only the first time the factory function is called
     if _Genre_Prediction_Service._instance is None:
         print("Loading latest MLflow model from registry...")
-        mlflow.set_tracking_uri(os.environ.get("MLFLOW_TRACKING_URI", "http://localhost:5000"))
+        mlflow.set_tracking_uri(os.environ.get("MLFLOW_TRACKING_URI", "http://mlflow:5000"))
         client = MlflowClient()
         versions = client.search_model_versions(f"name='{MODEL_NAME}'")
         latest_version = max(versions, key=lambda v: int(v.version))
