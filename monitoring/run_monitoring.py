@@ -70,6 +70,32 @@ def metrics():
 
     metrics_output = []
     
+    for metric in results["metrics"]:
+        metric_id = metric.get("metric_id")
+        value = metric.get("value")
+
+        # Handle simple numeric values
+        if isinstance(value, (int, float)):
+            metric_name = metric_id.lower().replace("()", "")
+            metrics_output.append(f"{metric_name} {value:.6f}")
+
+        # Handle dict values (e.g., missing values)
+        elif isinstance(value, dict):
+            for sub_key, sub_val in value.items():
+                sub_metric_name = f"{metric_id.lower().replace('()', '').replace(',', '_').replace(' ', '_')}_{sub_key}"
+                if isinstance(sub_val, (int, float)):
+                    metrics_output.append(f"{sub_metric_name} {sub_val:.6f}")
+
+        # Handle np.float values (as strings if needed)
+        else:
+            try:
+                float_val = float(value)
+                metric_name = metric_id.lower().replace("()", "")
+                metrics_output.append(f"{metric_name} {float_val:.6f}")
+            except Exception:
+                metrics_output.append(f"# could not parse metric: {metric_id}")
+
+    metrics_output.insert(0, "# Evidently Monitoring Metrics")
     
 
     return Response("\n".join(metrics_output), mimetype="text/plain")
