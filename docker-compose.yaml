@@ -118,6 +118,7 @@ services:
     restart: always
     volumes:
       - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
     ports:
@@ -134,9 +135,18 @@ services:
     depends_on:
       - prometheus
     volumes:
-    - ./monitoring/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
-    - ./monitoring/grafana/provisioning/dashboards/json:/etc/grafana/provisioning/dashboards/json
-    - ./monitoring/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
+      - ./monitoring/grafana/provisioning/dashboards/json:/etc/grafana/provisioning/dashboards/json
+      - ./monitoring/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
+      - GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=/etc/grafana/provisioning/dashboards/json/evidently_dashboard.json
 
 volumes:
   prefect_pg_data:
+  grafana_data:
+  prometheus_data:
