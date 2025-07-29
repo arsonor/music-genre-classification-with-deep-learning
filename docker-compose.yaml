@@ -35,6 +35,7 @@ services:
       --host 0.0.0.0
       --port 5000
       --workers 1
+      --gunicorn-opts "--timeout 180"
     ports:
       - "5000:5000"
     volumes:
@@ -109,7 +110,6 @@ services:
     volumes:
       - ./monitoring/data:/app/monitoring/data
     environment:
-      - MONITORING_INTERVAL_SECONDS=300
       - PROMETHEUS_PORT=8000
   
   prometheus:
