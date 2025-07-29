@@ -24,7 +24,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "cete3c09jvawwa"
+        "uid": "prometheus_ds"
       },
       "fieldConfig": {
         "defaults": {
@@ -78,7 +78,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "accuracy__",
+          "expr": "accuracy",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "range": true,
@@ -92,7 +92,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "cete3c09jvawwa"
+        "uid": "prometheus_ds"
       },
       "fieldConfig": {
         "defaults": {
@@ -142,7 +142,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "f1score_conf_matrix_true_",
+          "expr": "f1score_conf_matrix_true",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "range": true,
@@ -156,7 +156,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "cete3c09jvawwa"
+        "uid": "prometheus_ds"
       },
       "fieldConfig": {
         "defaults": {
@@ -206,7 +206,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "valuedrift_column_predicted_genre_",
+          "expr": "valuedrift_column_predicted_genre",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "range": true,
@@ -220,7 +220,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "cete3c09jvawwa"
+        "uid": "prometheus_ds"
       },
       "fieldConfig": {
         "defaults": {
@@ -270,7 +270,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "driftedcolumnscount_columns_mfcc_1_mfcc_2_mfcc_3_mfcc_4_mfcc_5_mfcc_6_mfcc_7_mfcc_8_mfcc_9_mfcc_10_mfcc_11_mfcc_12_mfcc_13_drift_share_0_5__count",
+          "expr": "driftedcolumnscount_columns_mfcc_1_mfcc_2_mfcc_3_mfcc_4_mfcc_5_mfcc_6_mfcc_7_mfcc_8_mfcc_9_mfcc_10_mfcc_11_mfcc_12_mfcc_13_drift_share_0_5_count",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "range": true,
@@ -284,7 +284,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "cete3c09jvawwa"
+        "uid": "prometheus_ds"
       },
       "fieldConfig": {
         "defaults": {
@@ -349,7 +349,7 @@
           "disableTextWrap": false,
           "editorMode": "builder",
           "exemplar": false,
-          "expr": "valuedrift_column_mfcc_1_",
+          "expr": "valuedrift_column_mfcc_1",
           "format": "time_series",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -363,7 +363,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "valuedrift_column_mfcc_2_",
+          "expr": "valuedrift_column_mfcc_2",
           "format": "time_series",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -375,7 +375,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "valuedrift_column_mfcc_3_",
+          "expr": "valuedrift_column_mfcc_3",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "MFCC 3",
@@ -386,7 +386,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "valuedrift_column_mfcc_4_",
+          "expr": "valuedrift_column_mfcc_4",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "MFCC 4",
@@ -397,7 +397,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "valuedrift_column_mfcc_5_",
+          "expr": "valuedrift_column_mfcc_5",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "MFCC 5",
@@ -408,7 +408,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "valuedrift_column_mfcc_6_",
+          "expr": "valuedrift_column_mfcc_6",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "MFCC 6",
@@ -419,7 +419,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "valuedrift_column_mfcc_7_",
+          "expr": "valuedrift_column_mfcc_7",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "MFCC 7",
@@ -430,7 +430,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "valuedrift_column_mfcc_8_",
+          "expr": "valuedrift_column_mfcc_8",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "MFCC 8",
@@ -441,7 +441,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "valuedrift_column_mfcc_9_",
+          "expr": "valuedrift_column_mfcc_9",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "MFCC 9",
@@ -452,7 +452,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "valuedrift_column_mfcc_10_",
+          "expr": "valuedrift_column_mfcc_10",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "MFCC 10",
@@ -463,7 +463,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "valuedrift_column_mfcc_11_",
+          "expr": "valuedrift_column_mfcc_11",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "MFCC 11",
@@ -474,7 +474,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "valuedrift_column_mfcc_12_",
+          "expr": "valuedrift_column_mfcc_12",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "MFCC 12",
@@ -485,7 +485,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "valuedrift_column_mfcc_13_",
+          "expr": "valuedrift_column_mfcc_13",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "MFCC 13",
@@ -500,7 +500,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "cete3c09jvawwa"
+        "uid": "prometheus_ds"
       },
       "fieldConfig": {
         "defaults": {
@@ -546,7 +546,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "rowcount__",
+          "expr": "rowcount",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "range": true,
@@ -560,7 +560,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "cete3c09jvawwa"
+        "uid": "prometheus_ds"
       },
       "fieldConfig": {
         "defaults": {
@@ -610,7 +610,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "duplicatedrowcount__",
+          "expr": "duplicatedrowcount",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "range": true,
@@ -624,7 +624,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "cete3c09jvawwa"
+        "uid": "prometheus_ds"
       },
       "fieldConfig": {
         "defaults": {
@@ -674,7 +674,7 @@
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "emptyrowscount__",
+          "expr": "emptyrowscount",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "range": true,

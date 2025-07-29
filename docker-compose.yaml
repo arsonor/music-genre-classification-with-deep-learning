@@ -105,12 +105,12 @@ services:
     container_name: monitoring
     restart: always
     ports:
-      - "9090:9090"
+      - "8000:8000"
     volumes:
       - ./monitoring/data:/app/monitoring/data
     environment:
       - MONITORING_INTERVAL_SECONDS=300
-      - PROMETHEUS_PORT=9090
+      - PROMETHEUS_PORT=8000
   
   prometheus:
     image: prom/prometheus

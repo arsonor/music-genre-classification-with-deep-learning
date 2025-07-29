@@ -7,4 +7,4 @@ COPY . /app
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
-CMD ["python", "run_monitoring.py"]
+CMD ["gunicorn", "-b", "0.0.0.0:8000", "run_monitoring:app"]
