@@ -1,0 +1,43 @@
+groups:
+  - name: model-monitoring-alerts
+    interval: 10s
+    rules:
+      # Accuracy Alert
+      - alert: AccuracyBelowThreshold
+        expr: accuracy < 0.85
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "Model accuracy dropped below 0.85"
+          description: "Current accuracy is {{ $value }}"
+
+      # F1 Score Alert
+      - alert: F1ScoreBelowThreshold
+        expr: f1score_conf_matrix_true < 0.85
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "Model F1-score dropped below 0.85"
+          description: "Current F1-score is {{ $value }}"
+
+      # Predicted Genre Drift Alert
+      - alert: PredictedGenreDriftLow
+        expr: valuedrift_column_predicted_genre < 0.1
+        for: 30s
+        labels:
+          severity: warning
+        annotations:
+          summary: "Predicted genre drift below 0.1"
+          description: "Drift metric for predicted_genre is {{ $value }}"
+
+      # Drifted Columns Count Alert
+      - alert: TooManyDriftedColumns
+        expr: driftedcolumnscount_columns_mfcc_1_mfcc_2_mfcc_3_mfcc_4_mfcc_5_mfcc_6_mfcc_7_mfcc_8_mfcc_9_mfcc_10_mfcc_11_mfcc_12_mfcc_13_drift_share_0_5_count > 3
+        for: 30s
+        labels:
+          severity: warning
+        annotations:
+          summary: "More than 3 columns are drifting"
+          description: "Drifted columns count is {{ $value }}"
