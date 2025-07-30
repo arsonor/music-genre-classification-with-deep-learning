@@ -99,6 +99,20 @@ services:
     volumes:
       - .:/app
 
+  prefect-trigger:
+    build:
+      context: ./alert_trigger
+      dockerfile: Dockerfile.webhook
+    container_name: prefect-trigger
+    environment:
+      - PREFECT_API_URL=http://prefect-server:4200/api
+      - PREFECT_FLOW_NAME=retrain_model
+      - PREFECT_DEPLOYMENT_ID=<YOUR_DEPLOYMENT_ID>
+    ports:
+      - "5080:5080"
+    depends_on:
+      - prefect-server
+
   monitoring:
     build:
       context: ./monitoring
@@ -127,6 +141,7 @@ services:
       - "9091:9090"
     depends_on:
       - monitoring
+      - alertmanager
 
   grafana:
     image: grafana/grafana
@@ -147,6 +162,15 @@ services:
       - GF_AUTH_ANONYMOUS_ENABLED=true
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
       - GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=/etc/grafana/provisioning/dashboards/json/evidently_dashboard.json
+
+  alertmanager:
+    image: prom/alertmanager
+    container_name: alertmanager
+    restart: always
+    volumes:
+      - ./monitoring/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+    ports:
+      - "9093:9093"
 
 volumes:
   prefect_pg_data:

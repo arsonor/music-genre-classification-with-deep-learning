@@ -1,0 +1,14 @@
+global:
+  resolve_timeout: 5m
+
+route:
+  receiver: "prefect-webhook"
+  group_wait: 10s
+  group_interval: 30s
+  repeat_interval: 1h
+
+receivers:
+  - name: "prefect-webhook"
+    webhook_configs:
+      - url: "http://prefect-trigger:5080/trigger"
+        send_resolved: true
