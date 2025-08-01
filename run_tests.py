@@ -23,7 +23,7 @@ def install_dependencies():
     """Install required dependencies for testing."""
     print("Installing dependencies...")
     
-    # Install main dependencies
+    # Install api dependencies
     subprocess.run([
         sys.executable, "-m", "pip", "install", "-r", "api/requirements.txt"
     ], check=True)
@@ -32,6 +32,12 @@ def install_dependencies():
     if os.path.exists("monitoring/requirements.txt"):
         subprocess.run([
             sys.executable, "-m", "pip", "install", "-r", "monitoring/requirements.txt"
+        ], check=True)
+    
+    # Install classifier dependencies
+    if os.path.exists("classifier/requirements.txt"):
+        subprocess.run([
+            sys.executable, "-m", "pip", "install", "-r", "classifier/requirements.txt"
         ], check=True)
     
     # Install test dependencies
@@ -61,6 +67,8 @@ def run_tests(test_type="all", verbose=False, coverage=False):
         cmd.append("tests/test_server.py")
     elif test_type == "monitoring":
         cmd.append("tests/test_monitoring.py")
+    elif test_type == "classifier":
+        cmd.append("tests/test_classifier.py")
     else:
         cmd.append(f"tests/test_{test_type}.py")
     
@@ -73,6 +81,7 @@ def run_tests(test_type="all", verbose=False, coverage=False):
         cmd.extend([
             "--cov=api",
             "--cov=monitoring",
+            "--cov=classifier",
             "--cov-report=term-missing",
             "--cov-report=html:htmlcov"
         ])
@@ -122,7 +131,7 @@ def main():
         "test_type",
         nargs="?",
         default="all",
-        choices=["all", "unit", "integration", "service", "server", "monitoring"],
+        choices=["all", "unit", "integration", "service", "server", "monitoring", "classifier"],
         help="Type of tests to run (default: all)"
     )
     

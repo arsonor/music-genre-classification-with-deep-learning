@@ -12,20 +12,26 @@ if [ ! -d "tests" ]; then
     mkdir -p tests
 fi
 
+# Create api directory if it doesn't exist
+if [ ! -d "api" ]; then
+    echo "❌ Error: api/ directory not found. Please run this script from the project root."
+    exit 1
+fi
+
 # Create monitoring directory if it doesn't exist
 if [ ! -d "monitoring" ]; then
     echo "📁 Creating monitoring directory..."
     mkdir -p monitoring
 fi
 
-# Check if we're in the right directory
-if [ ! -d "api" ]; then
-    echo "❌ Error: api/ directory not found. Please run this script from the project root."
-    exit 1
+# Create classifier directory if it doesn't exist
+if [ ! -d "classifier" ]; then
+    echo "📁 Creating classifier directory..."
+    mkdir -p classifier
 fi
 
-# Install main dependencies
-echo "📦 Installing main API dependencies..."
+# Install api dependencies
+echo "📦 Installing API dependencies..."
 pip install -r api/requirements.txt
 
 # Install monitoring dependencies if they exist
@@ -34,6 +40,14 @@ if [ -f "monitoring/requirements.txt" ]; then
     pip install -r monitoring/requirements.txt
 else
     echo "⚠️  monitoring/requirements.txt not found, skipping monitoring dependencies"
+fi
+
+# Install classifier dependencies if they exist
+if [ -f "classifier/requirements.txt" ]; then
+    echo "📊 Installing classifier dependencies..."
+    pip install -r classifier/requirements.txt
+else
+    echo "⚠️  classifier/requirements.txt not found, skipping classifier dependencies"
 fi
 
 # Install test dependencies
@@ -52,6 +66,11 @@ if [ -f "test_monitoring_runner.py" ]; then
     echo "✅ Made test_monitoring_runner.py executable"
 fi
 
+if [ -f "test_classifier_runner.py" ]; then
+    chmod +x test_classifier_runner.py
+    echo "✅ Made test_classifier_runner.py executable"
+fi
+
 # Run a quick test to verify setup
 echo "🔍 Running quick test to verify setup..."
 python -m pytest tests/ --collect-only -q
@@ -67,6 +86,7 @@ if [ $? -eq 0 ]; then
     echo "  Run API tests:           python run_tests.py service"
     echo "  Run server tests:        python run_tests.py server"
     echo "  Run monitoring tests:    python run_tests.py monitoring"
+    echo "  Run classifier tests:    python run_tests.py classifier"
     echo "  Clean artifacts:         python run_tests.py --clean"
     echo ""
     echo "📖 For more options, see: python run_tests.py --help"
@@ -75,6 +95,7 @@ if [ $? -eq 0 ]; then
     echo "  • API/Service tests (genre prediction logic)"
     echo "  • Server tests (Flask endpoint testing)"
     echo "  • Monitoring tests (Prometheus metrics)"
+    echo "  • Classifier tests (ML pipeline & Prefect flows)"
     echo "  • Integration tests (end-to-end workflows)"
 else
     echo "❌ Setup verification failed. Please check the error messages above."
