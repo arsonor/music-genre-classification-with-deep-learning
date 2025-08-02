@@ -44,7 +44,7 @@ fi
 
 # Install classifier dependencies if they exist
 if [ -f "classifier/requirements.txt" ]; then
-    echo "📊 Installing classifier dependencies..."
+    echo "🤖 Installing classifier dependencies..."
     pip install -r classifier/requirements.txt
 else
     echo "⚠️  classifier/requirements.txt not found, skipping classifier dependencies"
@@ -53,6 +53,10 @@ fi
 # Install test dependencies
 echo "🧪 Installing test dependencies..."
 pip install -r tests/requirements-test.txt
+
+# Install code quality tools
+echo "🔍 Installing code quality tools..."
+pip install -r requirements-quality.txt
 
 # Make run_tests.py executable
 if [ -f "run_tests.py" ]; then
@@ -69,6 +73,12 @@ fi
 if [ -f "test_classifier_runner.py" ]; then
     chmod +x test_classifier_runner.py
     echo "✅ Made test_classifier_runner.py executable"
+fi
+
+# Make code quality script executable
+if [ -f "check_code_quality.py" ]; then
+    chmod +x check_code_quality.py
+    echo "✅ Made check_code_quality.py executable"
 fi
 
 # Run a quick test to verify setup
@@ -88,6 +98,11 @@ if [ $? -eq 0 ]; then
     echo "  Run monitoring tests:    python run_tests.py monitoring"
     echo "  Run classifier tests:    python run_tests.py classifier"
     echo "  Clean artifacts:         python run_tests.py --clean"
+    echo ""
+    echo "🔍 Code quality commands:"
+    echo "  Check code quality:      python check_code_quality.py"
+    echo "  Fix formatting:          python check_code_quality.py --fix"
+    echo "  Quick format:            python check_code_quality.py --skip-pylint --fix"
     echo ""
     echo "📖 For more options, see: python run_tests.py --help"
     echo ""

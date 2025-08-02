@@ -1,6 +1,9 @@
 import os
+
 import numpy as np
+
 from prefect import task
+
 
 @task
 def download_and_validate_data():
@@ -10,6 +13,7 @@ def download_and_validate_data():
         raise FileNotFoundError(f"{file_path} not found")
     print(f"Data found at: {file_path}")
     return file_path
+
 
 @task
 def extract_features(file_path):

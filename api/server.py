@@ -1,8 +1,9 @@
-import random
 import os
+import random
+
 # from datetime import datetime, timezone
 import pandas as pd
-from flask import Flask, request, jsonify
+from flask import Flask, jsonify, request
 from genre_prediction_service import Genre_Prediction_Service
 
 # Instantiate Flask app
@@ -30,7 +31,7 @@ def predict():
 
     # Instantiate genre prediction service singleton
     gps = Genre_Prediction_Service()
-    
+
     # Predict genre
     predicted_genre = gps.predict(file_name)
 
@@ -50,8 +51,8 @@ def predict():
     # Append to current.parquet (create if not exists)
     os.makedirs(os.path.dirname(CURRENT_PARQUET_PATH), exist_ok=True)
     if os.path.exists(CURRENT_PARQUET_PATH):
-       df_existing = pd.read_parquet(CURRENT_PARQUET_PATH)
-       df_combined = pd.concat([df_existing, df_row], ignore_index=True)
+        df_existing = pd.read_parquet(CURRENT_PARQUET_PATH)
+        df_combined = pd.concat([df_existing, df_row], ignore_index=True)
     else:
         df_combined = df_row
 

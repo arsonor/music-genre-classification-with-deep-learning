@@ -1,21 +1,23 @@
 import os
 import re
+
 import pandas as pd
-from evidently import MulticlassClassification, Dataset, DataDefinition, Report
-from evidently.metrics import (
-    RowCount,
-    EmptyRowsCount,
-    DuplicatedRowCount,
-    MissingValueCount,
-    ValueDrift,
-    DriftedColumnsCount,
-    CategoryCount,
-    Accuracy,
-    F1Score
-)
 from flask import Flask, Response
+from evidently import Report, Dataset, DataDefinition, MulticlassClassification
+from evidently.metrics import (
+    F1Score,
+    Accuracy,
+    RowCount,
+    ValueDrift,
+    CategoryCount,
+    EmptyRowsCount,
+    MissingValueCount,
+    DuplicatedRowCount,
+    DriftedColumnsCount,
+)
 
 app = Flask(__name__)
+
 
 # Sanitize metric names to be Prometheus-compatible
 def prometheus_safe(name: str) -> str:
@@ -26,6 +28,7 @@ def prometheus_safe(name: str) -> str:
     # Remove leading/trailing underscores
     name = name.strip("_")
     return name.lower()
+
 
 @app.route("/metrics")
 def metrics():
@@ -47,14 +50,17 @@ def metrics():
         numerical_columns=mfcc_features,
         classification=[
             MulticlassClassification(
-                target="actual_genre",
-                prediction_labels="predicted_genre"
+                target="actual_genre", prediction_labels="predicted_genre"
             )
         ],
     )
 
-    reference_data = Dataset.from_pandas(reference_df, data_definition=multiclass_definition)
-    current_data = Dataset.from_pandas(current_df, data_definition=multiclass_definition)
+    reference_data = Dataset.from_pandas(
+        reference_df, data_definition=multiclass_definition
+    )
+    current_data = Dataset.from_pandas(
+        current_df, data_definition=multiclass_definition
+    )
 
     metrics_list = [
         RowCount(),
@@ -66,11 +72,13 @@ def metrics():
         ValueDrift(column="predicted_genre"),
         CategoryCount(column="predicted_genre", categories=categories),
         Accuracy(),
-        F1Score()
+        F1Score(),
     ]
 
     report = Report(metrics=metrics_list)
-    results = report.run(reference_data=reference_data, current_data=current_data).dict()
+    results = report.run(
+        reference_data=reference_data, current_data=current_data
+    ).dict()
 
     output_lines = []
     output_lines.append("# HELP evidently_metric Evidently monitoring metric")
@@ -99,6 +107,7 @@ def metrics():
                 pass
 
     return Response("\n".join(output_lines) + "\n", mimetype="text/plain")
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000)

@@ -1,8 +1,11 @@
 import numpy as np
-from sklearn.model_selection import train_test_split
 import matplotlib
-matplotlib.use("Agg") # use a backend without graphical interface (avoid errors with Prefect/tasks)
 import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+
+# Use a backend without graphical interface (avoid errors with Prefect/tasks)
+matplotlib.use("Agg")
+
 
 def load_data(data_path):
     data = np.load(data_path)
@@ -11,13 +14,15 @@ def load_data(data_path):
     print(f"Loaded X:{X.shape}, y:{y.shape}")
     return X, y
 
+
 def prepare_dataset(data_path, test_size=0.2, val_size=0.25):
     X, y = load_data(data_path)
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size)
-    X_train, X_val,  y_train, y_val  = train_test_split(
+    X_train, X_val, y_train, y_val = train_test_split(
         X_train, y_train, test_size=val_size
     )
     return X_train, y_train, X_val, y_val, X_test, y_test
+
 
 def plot_history(history, save_path="training_history.png"):
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(6, 8))
