@@ -39,10 +39,20 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-quality-
 
-      - name: Install code quality tools
+      - name: Install code quality tools and dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements-quality.txt
+          # Install all project dependencies for proper linting
+          if [ -f "api/requirements.txt" ]; then
+            pip install -r api/requirements.txt
+          fi
+          if [ -f "monitoring/requirements.txt" ]; then
+            pip install -r monitoring/requirements.txt
+          fi
+          if [ -f "classifier/requirements.txt" ]; then
+            pip install -r classifier/requirements.txt
+          fi
 
       - name: Run code quality checks
         run: |
