@@ -288,8 +288,22 @@ jobs:
 
       - name: Test Docker Compose setup (core services only)
         run: |
+          # Check if docker compose (new syntax) or docker-compose (legacy) is available
+          if command -v docker &> /dev/null && docker compose version &> /dev/null; then
+            DOCKER_COMPOSE_CMD="docker compose"
+          elif command -v docker-compose &> /dev/null; then
+            DOCKER_COMPOSE_CMD="docker-compose"
+          else
+            echo "Installing docker-compose..."
+            sudo curl -L "https://github.com/docker/compose/releases/download/v2.20.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+            sudo chmod +x /usr/local/bin/docker-compose
+            DOCKER_COMPOSE_CMD="docker-compose"
+          fi
+          
+          echo "Using: $DOCKER_COMPOSE_CMD"
+          
           # Start only the core services needed for API testing
-          docker-compose up -d api nginx mlflow
+          $DOCKER_COMPOSE_CMD up -d api nginx mlflow
           
           # Wait for services to be ready
           sleep 45
@@ -302,12 +316,12 @@ jobs:
           
           # Check container logs for debugging
           echo "=== API Logs ==="
-          docker-compose logs api
+          $DOCKER_COMPOSE_CMD logs api
           echo "=== Nginx Logs ==="
-          docker-compose logs nginx
+          $DOCKER_COMPOSE_CMD logs nginx
           
           # Clean up
-          docker-compose down
+          $DOCKER_COMPOSE_CMD down
 
   # Job 6: Performance Tests
   performance-tests:
