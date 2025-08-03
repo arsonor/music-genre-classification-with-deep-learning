@@ -19,7 +19,7 @@ def send_file(url: str, file_path: str, genre: str = "") -> dict:
             data["actual_genre"] = genre
 
         try:
-            response = requests.post(url, files=files, data=data)
+            response = requests.post(url, files=files, data=data, timeout=30)
         except requests.exceptions.RequestException as e:
             return {"error": str(e)}
 
