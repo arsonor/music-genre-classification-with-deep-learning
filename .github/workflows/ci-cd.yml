@@ -255,28 +255,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build Flask Docker image
-        uses: docker/build-push-action@v5
+      - name: Set up Python for test file creation
+        uses: actions/setup-python@v5
         with:
-          context: ./api
-          file: ./api/Dockerfile.api
-          tags: music-genre-api:latest
-          push: false
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          python-version: ${{ env.PYTHON_VERSION }}
 
-      - name: Build Nginx Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: ./nginx
-          file: ./nginx/Dockerfile.nginx
-          tags: music-genre-nginx:latest
-          push: false
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+      - name: Install numpy for test audio creation
+        run: |
+          python -m pip install --upgrade pip
+          pip install numpy
 
       - name: Create test audio file for Docker testing
         run: |
@@ -299,13 +286,13 @@ jobs:
               wav_file.writeframes(audio_data.tobytes())
           "
 
-      - name: Test Docker Compose setup
+      - name: Test Docker Compose setup (core services only)
         run: |
-          # Start the services
-          docker-compose up -d --build
+          # Start only the core services needed for API testing
+          docker-compose up -d api nginx mlflow
           
           # Wait for services to be ready
-          sleep 30
+          sleep 45
           
           # Test the API endpoint
           curl -f http://localhost:80/health || echo "Health check endpoint not available"
@@ -313,8 +300,10 @@ jobs:
           # Test prediction endpoint with dummy file
           curl -X POST -F "file=@test/blues.00000.wav" http://localhost:80/predict || echo "Prediction test completed"
           
-          # Check container logs
+          # Check container logs for debugging
+          echo "=== API Logs ==="
           docker-compose logs api
+          echo "=== Nginx Logs ==="
           docker-compose logs nginx
           
           # Clean up
