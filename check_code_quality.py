@@ -89,7 +89,7 @@ def check_pylint(files):
         return True
     
     # Split files into smaller chunks to avoid command line length issues
-    chunk_size = 10
+    chunk_size = 4
     file_chunks = [files[i:i + chunk_size] for i in range(0, len(files), chunk_size)]
     
     all_passed = True
