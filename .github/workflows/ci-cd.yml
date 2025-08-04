@@ -307,15 +307,21 @@ jobs:
           
           # Wait for services to be ready
           sleep 45
-          
-          # Test prediction endpoint with dummy file
-          curl -X POST -F "file=@test/blues.00000.wav" http://localhost:80/predict || echo "Prediction test completed"
-          
+
           # Check container logs for debugging
           echo "=== API Logs ==="
           $DOCKER_COMPOSE_CMD logs api
           echo "=== Nginx Logs ==="
           $DOCKER_COMPOSE_CMD logs nginx
+          echo "=== MLflow Logs ==="
+          $DOCKER_COMPOSE_CMD logs mlflow
+          
+          # Check if services are running
+          echo "=== Container Status ==="
+          $DOCKER_COMPOSE_CMD ps
+          
+          # Test prediction endpoint with dummy file
+          curl -X POST -F "file=@test/blues.00000.wav" http://localhost:80/predict || echo "Prediction test completed"
           
           # Clean up
           $DOCKER_COMPOSE_CMD down
@@ -338,40 +344,255 @@ jobs:
 
       - name: Install performance testing tools
         run: |
-          pip install locust pytest-benchmark
+          python -m pip install --upgrade pip
+          pip install requests numpy
 
-      - name: Create performance test
+      - name: Create test audio file
         run: |
-          cat > performance_test.py << 'EOF'
-          import time
-          import requests
-          import concurrent.futures
+          mkdir -p test
+          python -c "
+          import numpy as np
+          import wave
           
-          def test_api_response_time():
-              """Test API response time"""
-              start_time = time.time()
-              try:
-                  response = requests.get('http://localhost:5000/health', timeout=10)
-                  end_time = time.time()
-                  response_time = end_time - start_time
-                  print(f"Response time: {response_time:.2f} seconds")
-                  assert response_time < 2.0, f"Response time too slow: {response_time:.2f}s"
-              except Exception as e:
-                  print(f"Performance test failed: {e}")
+          sample_rate = 22050
+          duration = 3
+          frequency = 440
           
-          if __name__ == "__main__":
-              test_api_response_time()
-          EOF
+          t = np.linspace(0, duration, int(sample_rate * duration), False)
+          audio_data = (np.sin(2 * np.pi * frequency * t) * 32767).astype(np.int16)
+          
+          with wave.open('test/blues.00000.wav', 'w') as wav_file:
+              wav_file.setnchannels(1)
+              wav_file.setsampwidth(2)  
+              wav_file.setframerate(sample_rate)
+              wav_file.writeframes(audio_data.tobytes())
+          
+          print('✅ Test audio file created: test/blues.00000.wav')
+          "
 
-      - name: Start application for performance testing
+      - name: Start Docker services for performance testing
         run: |
-          # Start the application in background
-          cd api && python server.py &
-          sleep 10
+          # Detect docker compose command
+          if command -v docker &> /dev/null && docker compose version &> /dev/null; then
+            DOCKER_COMPOSE_CMD="docker compose"
+          elif command -v docker-compose &> /dev/null; then
+            DOCKER_COMPOSE_CMD="docker-compose"
+          else
+            echo "Installing docker-compose..."
+            sudo curl -L "https://github.com/docker/compose/releases/download/v2.20.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+            sudo chmod +x /usr/local/bin/docker-compose
+            DOCKER_COMPOSE_CMD="docker-compose"
+          fi
+          
+          echo "Using: $DOCKER_COMPOSE_CMD"
+          echo "$DOCKER_COMPOSE_CMD" > /tmp/docker_compose_cmd
+          
+          # Start core services
+          $DOCKER_COMPOSE_CMD up -d api nginx mlflow
+          
+          # Wait for services to be ready
+          echo "⏳ Waiting for services to start..."
+          sleep 60
+          
+          # Check service status
+          echo "📊 Service Status:"
+          $DOCKER_COMPOSE_CMD ps
 
       - name: Run performance tests
         run: |
+          cat > performance_test.py << 'EOF'
+          #!/usr/bin/env python3
+          """
+          Performance tests for Music Genre Classification API
+          Tests response times and concurrent request handling
+          """
+          import time
+          import requests
+          import concurrent.futures
+          from statistics import mean, median
+          
+          API_URL = "http://localhost:80/predict"
+          AUDIO_FILE = "test/blues.00000.wav"
+          TIMEOUT = 15
+          
+          def make_single_request():
+              """Make a single API request and measure response time"""
+              start_time = time.time()
+              try:
+                  with open(AUDIO_FILE, 'rb') as audio_file:
+                      files = {'file': audio_file}
+                      response = requests.post(API_URL, files=files, timeout=TIMEOUT)
+                  
+                  end_time = time.time()
+                  response_time = end_time - start_time
+                  
+                  return {
+                      'response_time': response_time,
+                      'status_code': response.status_code,
+                      'success': response.status_code == 200,
+                      'content_length': len(response.content) if response.content else 0
+                  }
+              except requests.exceptions.Timeout:
+                  return {
+                      'response_time': TIMEOUT,
+                      'status_code': 'TIMEOUT',
+                      'success': False,
+                      'content_length': 0
+                  }
+              except Exception as e:
+                  end_time = time.time()
+                  return {
+                      'response_time': end_time - start_time,
+                      'status_code': f'ERROR: {str(e)}',
+                      'success': False,
+                      'content_length': 0
+                  }
+          
+          def test_single_request_performance():
+              """Test single request performance"""
+              print("🚀 Testing Single Request Performance")
+              print("-" * 50)
+              
+              result = make_single_request()
+              
+              print(f"Response Time: {result['response_time']:.2f}s")
+              print(f"Status Code: {result['status_code']}")
+              print(f"Content Length: {result['content_length']} bytes")
+              print(f"Success: {'✅' if result['success'] else '❌'}")
+              
+              # Performance assertions
+              assert result['response_time'] < 10.0, f"Single request too slow: {result['response_time']:.2f}s"
+              
+              if result['success']:
+                  assert result['response_time'] < 5.0, f"Successful request should be faster: {result['response_time']:.2f}s"
+                  print("✅ Single request performance: PASSED")
+              else:
+                  print("⚠️  Request failed but response time acceptable")
+              
+              return result
+          
+          def test_concurrent_requests():
+              """Test concurrent request handling"""
+              print("\n🔄 Testing Concurrent Request Performance")
+              print("-" * 50)
+              
+              num_requests = 5
+              print(f"Making {num_requests} concurrent requests...")
+              
+              start_time = time.time()
+              
+              with concurrent.futures.ThreadPoolExecutor(max_workers=num_requests) as executor:
+                  futures = [executor.submit(make_single_request) for _ in range(num_requests)]
+                  results = [future.result() for future in futures]
+              
+              total_time = time.time() - start_time
+              
+              # Analyze results
+              response_times = [r['response_time'] for r in results]
+              successful_requests = sum(1 for r in results if r['success'])
+              
+              print(f"Total Execution Time: {total_time:.2f}s")
+              print(f"Successful Requests: {successful_requests}/{num_requests}")
+              print(f"Success Rate: {(successful_requests/num_requests)*100:.1f}%")
+              print(f"Average Response Time: {mean(response_times):.2f}s")
+              print(f"Median Response Time: {median(response_times):.2f}s")
+              print(f"Min Response Time: {min(response_times):.2f}s")
+              print(f"Max Response Time: {max(response_times):.2f}s")
+              
+              # Performance assertions
+              assert total_time < 30.0, f"Concurrent requests took too long: {total_time:.2f}s"
+              assert mean(response_times) < 12.0, f"Average response time too slow: {mean(response_times):.2f}s"
+              
+              # At least some requests should complete (even if they fail functionally)
+              completed_requests = sum(1 for r in results if r['status_code'] != 'TIMEOUT')
+              assert completed_requests >= num_requests * 0.8, f"Too many timeouts: {completed_requests}/{num_requests}"
+              
+              print("✅ Concurrent request performance: PASSED")
+              
+              return results
+          
+          def test_response_consistency():
+              """Test response time consistency"""
+              print("\n📊 Testing Response Time Consistency")
+              print("-" * 50)
+              
+              num_tests = 3
+              results = []
+              
+              for i in range(num_tests):
+                  print(f"Test {i+1}/{num_tests}...")
+                  result = make_single_request()
+                  results.append(result)
+                  time.sleep(1)  # Small delay between requests
+              
+              response_times = [r['response_time'] for r in results]
+              avg_time = mean(response_times)
+              
+              print(f"Response Times: {[f'{t:.2f}s' for t in response_times]}")
+              print(f"Average: {avg_time:.2f}s")
+              print(f"Standard Deviation: {(sum((t - avg_time)**2 for t in response_times) / len(response_times))**0.5:.2f}s")
+              
+              # Consistency check - no response should be more than 3x the average
+              max_acceptable = avg_time * 3
+              outliers = [t for t in response_times if t > max_acceptable]
+              
+              assert len(outliers) == 0, f"Inconsistent response times detected: {outliers}"
+              print("✅ Response time consistency: PASSED")
+              
+              return results
+          
+          def main():
+              """Run all performance tests"""
+              print("🎵 Music Genre Classification API - Performance Tests")
+              print("=" * 60)
+              
+              try:
+                  # Test 1: Single request performance
+                  single_result = test_single_request_performance()
+                  
+                  # Test 2: Concurrent requests
+                  concurrent_results = test_concurrent_requests()
+                  
+                  # Test 3: Response consistency
+                  consistency_results = test_response_consistency()
+                  
+                  print("\n🏆 PERFORMANCE TEST SUMMARY")
+                  print("=" * 40)
+                  print("✅ All performance tests PASSED!")
+                  print(f"📈 API is responsive and handles load appropriately")
+                  
+                  # Summary statistics
+                  all_times = [single_result['response_time']] + [r['response_time'] for r in concurrent_results] + [r['response_time'] for r in consistency_results]
+                  print(f"📊 Overall Response Time Stats:")
+                  print(f"   Average: {mean(all_times):.2f}s")
+                  print(f"   Median: {median(all_times):.2f}s")
+                  print(f"   Min: {min(all_times):.2f}s")
+                  print(f"   Max: {max(all_times):.2f}s")
+                  
+                  return True
+                  
+              except AssertionError as e:
+                  print(f"\n❌ PERFORMANCE TEST FAILED: {e}")
+                  return False
+              except Exception as e:
+                  print(f"\n💥 UNEXPECTED ERROR: {e}")
+                  return False
+          
+          if __name__ == "__main__":
+              success = main()
+              exit(0 if success else 1)
+          EOF
+          
+          echo "🧪 Starting Performance Tests..."
           python performance_test.py
+
+      - name: Cleanup Docker services
+        if: always()
+        run: |
+          DOCKER_COMPOSE_CMD=$(cat /tmp/docker_compose_cmd 2>/dev/null || echo "docker compose")
+          echo "🧹 Cleaning up Docker services..."
+          $DOCKER_COMPOSE_CMD down
+          echo "✅ Cleanup completed"
 
   # Job 7: Notification
   notify:
