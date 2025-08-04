@@ -173,5 +173,3 @@ cython_debug/
 data_10.json
 genres/
 
-mlruns/
-artifacts/

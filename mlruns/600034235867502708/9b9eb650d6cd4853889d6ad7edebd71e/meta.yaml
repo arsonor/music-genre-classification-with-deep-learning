@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/600034235867502708/9b9eb650d6cd4853889d6ad7edebd71e/artifacts
+end_time: 1753559536307
+entry_point_name: ''
+experiment_id: '600034235867502708'
+lifecycle_stage: active
+run_id: 9b9eb650d6cd4853889d6ad7edebd71e
+run_name: stately-horse-117
+run_uuid: 9b9eb650d6cd4853889d6ad7edebd71e
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1753559448892
+status: 3
+tags: []
+user_id: marti

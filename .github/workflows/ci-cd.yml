@@ -308,9 +308,6 @@ jobs:
           # Wait for services to be ready
           sleep 45
           
-          # Test the API endpoint
-          curl -f http://localhost:80/health || echo "Health check endpoint not available"
-          
           # Test prediction endpoint with dummy file
           curl -X POST -F "file=@test/blues.00000.wav" http://localhost:80/predict || echo "Prediction test completed"
           
@@ -369,7 +366,7 @@ jobs:
       - name: Start application for performance testing
         run: |
           # Start the application in background
-          cd flask && python server.py &
+          cd api && python server.py &
           sleep 10
 
       - name: Run performance tests
