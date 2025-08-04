@@ -139,7 +139,7 @@ run-local: ## Run Flask server locally
 
 run-client: ## Run test client
 	@echo "🎵 Running test client..."
-	@python client.py
+	@python client.py --file audio_files_test/
 
 train-model: ## Train the classification model
 	@echo "🤖 Training classification model..."

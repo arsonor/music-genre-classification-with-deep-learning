@@ -1,8 +1,8 @@
-## 🛠 **Training Pipeline (Prefect + MLflow)**
+# 🛠 **Training Pipeline (Prefect + MLflow)**
 
 The training pipeline implements **automated ML workflows** with experiment tracking and model versioning.
 
-### **🌊 Prefect Workflow Orchestration**
+## **🌊 Prefect Workflow Orchestration**
 
 ```mermaid
 graph TD
@@ -65,7 +65,7 @@ def train_task(file_path):
                               registered_model_name="music_genre_tf_model")
 ```
 
-### **🔬 MLflow Experiment Tracking**
+## **🔬 MLflow Experiment Tracking**
 
 **Comprehensive Logging**:
 - **Hyperparameters**: All training configuration
@@ -108,7 +108,7 @@ training:
 - **Data augmentation**: Time-domain and frequency-domain transforms
 - **Class balancing**: Equal sampling across 10 genres
 
-### **🔄 Pipeline Triggers**
+## **🔄 Pipeline Triggers**
 
 **Automated Scheduling**:
 ```python

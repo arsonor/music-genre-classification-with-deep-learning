@@ -48,60 +48,50 @@ This project serves as a **comprehensive MLOps template** demonstrating industry
 |----------|-------------|-------------|
 | **[🚀 Test & Run Guide](docs/TEST_RUN.md)** | Get up and running in 5 minutes | [Install](docs/QUICK_START.md#installation) • [Run](docs/QUICK_START.md#running) • [Test](docs/QUICK_START.md#testing) |
 | **[🏗️ Architecture Guide](docs/ARCHITECTURE.md)** | Technical architecture and design | [Model](docs/ARCHITECTURE.md#model-architecture) • [Services](docs/ARCHITECTURE.md#service-architecture) • [Data Flow](docs/ARCHITECTURE.md#data-flow) |
-| **[🐳 Deployment Guide](docs/DEPLOYMENT.md)** | Docker, production setup, scaling | [Docker Compose](docs/DEPLOYMENT.md#docker-compose) • [Production](docs/DEPLOYMENT.md#production) • [Scaling](docs/DEPLOYMENT.md#scaling) |
 | **[🔄 API Documentation](docs/API.md)** | Complete API reference and examples | [Endpoints](docs/API.md#endpoints) • [Examples](docs/API.md#examples) • [Integration](docs/API.md#integration) |
-| **[🛠️ Development Guide](docs/DEVELOPMENT.md)** | Development workflow and contribution | [Setup](docs/DEVELOPMENT.md#setup) • [Testing](docs/DEVELOPMENT.md#testing) • [Contributing](docs/DEVELOPMENT.md#contributing) |
 | **[📊 Monitoring Guide](docs/MONITORING.md)** | Model monitoring and observability | [Dashboards](docs/MONITORING.md#dashboards) • [Alerts](docs/MONITORING.md#alerts) • [Metrics](docs/MONITORING.md#metrics) |
-| **[🌊 Training Pipeline](docs/TRAINING.md)** | ML pipeline and experiment management | [Prefect](docs/TRAINING.md#prefect-workflows) • [MLflow](docs/TRAINING.md#mlflow-tracking) • [Automation](docs/TRAINING.md#automation) |
+| **[🌊 Training Pipeline](docs/TRAINING.md)** | ML pipeline and experiment management | [Prefect](docs/TRAINING.md#prefect-workflow-orchestration) • [MLflow](docs/TRAINING.md#mlflow-experiment-tracking) • [Automation](docs/TRAINING.md#pipeline-triggers) |
+| **[🛠️ Model Development Guide](docs/MODEL_DEV.md)** | From raw audio dataset to a deep learning model | [Dataset](docs/MODEL_DEV.md#dataset-description) • [Architecture](docs/MODEL_DEV.md#model-architecture) • [Notebooks](docs/MODEL_DEV.md#notebooks) |
 
 ---
 
-## ⚡ **Quick Start**
-# 🚀 Quick Start Guide
+## ⚡ **Quick Start Guide**
 
-Get the music genre classification MLOps pipeline running in 5 minutes!
+The easiest way to run a first prediction for testing the app is to use **docker-compose**.  
+And the fastest way is to run it in a **GitHub codespace**.
 
-### **Prerequisites**
+### **Prerequisites (include in a codespace)**
 - **Python 3.11+** 
 - **Docker & Docker Compose**
 - **Git**
 
-### **1️⃣ Setup**
+### **1️⃣ Create a Codespace on main**
+
+### **2️⃣ Start only the required services for inference**
 ```bash
-git clone https://github.com/arsonor/music-genre-classification-with-deep-learning
-cd music-genre-classification-with-deep-learning
-
-# Complete development setup (installs dependencies + pre-commit hooks)
-make dev-setup  # Or: bash setup_tests.sh
+docker-compose up --build mlflow api nginx -d
 ```
-
-### **2️⃣ Start All Services**
-```bash
-# Start entire MLOps stack
-make docker-up
-
-# Or alternatively:
-docker-compose up --build -d
-```
-
 ### **3️⃣ Test**
 ```bash
-# Test with sample audio
+# With an audio file in the test folder:
+python client.py --file audio_files_test/blues.00000.wav
+
+# Test the entire folder:
+python client.py --file audio_files_test/
+# or with Makefile:
 make run-client
-
-# Or manually:
-curl -X POST -F "file=@test/blues.00000.wav" http://localhost/predict
 ```
+The first prediction is slow (20-30s) because:
 
-### **4️⃣ Access Services**
-- **🎵 API**: http://localhost (Nginx reverse proxy)
-- **🔬 MLflow**: http://localhost:5000 (Experiment tracking)
-- **🌊 Prefect**: http://localhost:4200 (Workflow orchestration)  
-- **📊 Grafana**: http://localhost:3000 (Monitoring dashboards)
-- **🔥 Prometheus**: http://localhost:9091 (Metrics collection)
+- MLflow model loading: Downloads model from registry
+- Library initialization: librosa, tensorflow, etc.
+- Audio processing: MFCC feature extraction
+- Model inference: First prediction through neural network
+
+Subsequent predictions will be much faster (almost instantaneous) since the model stays loaded in memory.
 
 
-📖 **Need more details?** See the [Complete Quick Start Guide](docs/QUICK_START.md)
+📖 **Want to go further?** See the [Complete Test & Run Guide](docs/TEST_RUN.md)
 
 ---
 
@@ -132,13 +122,6 @@ graph TB
     end
 ```
 
-### **Core Components**
-- **🎵 Prediction API**: Flask service with model inference
-- **🧠 CNN Model**: Architecture optimized for MFCC features  
-- **🔬 Experiment Tracking**: MLflow for model versioning
-- **🌊 Workflow Orchestration**: Prefect for training automation
-- **📊 Model Monitoring**: Evidently + Prometheus + Grafana
-- **🐳 Infrastructure**: Docker Compose orchestration
 
 📖 **Deep dive into architecture**: [Architecture Guide](docs/ARCHITECTURE.md)
 
@@ -184,7 +167,7 @@ This project provides a solid foundation for music genre classification while ac
 ## 🎓 **Learning Resources**
 
 ### **📚 Understand the Technologies**
-- **[CNN for Audio](docs/ARCHITECTURE.md#model-architecture)**: How our model processes MFCC features
+- **[CNN for Audio](docs/MODEL_DEV.md#model-architecture)**: How the model processes MFCC features
 - **[MLOps Pipeline](docs/TRAINING.md)**: End-to-end ML workflow automation
 - **[Model Monitoring](docs/MONITORING.md)**: Production model observability
 - **[API Design](docs/API.md)**: RESTful service architecture
@@ -193,34 +176,12 @@ This project provides a solid foundation for music genre classification while ac
 - **[Training Your Own Model](docs/TRAINING.md#custom-training)**: Modify and retrain
 - **[Custom Monitoring](docs/MONITORING.md#custom-dashboards)**: Create your own dashboards  
 - **[API Integration](docs/API.md#integration-examples)**: Integrate with your app
-- **[Production Deployment](docs/DEPLOYMENT.md#production)**: Deploy to cloud
 
 ### **📊 Notebooks & Experiments**
 - **[EDA.ipynb](notebooks/EDA.ipynb)**: Exploratory data analysis
 - **[data_preparation.ipynb](notebooks/data_preparation.ipynb)**: Feature engineering
 - **[model_NN_classification.ipynb](notebooks/model_NN_classification.ipynb)**: Model selection
-
----
-
-## 🤝 **Contributing**
-
-We welcome contributions! Here's how to get started:
-
-1. **📖 Read**: [Development Guide](docs/DEVELOPMENT.md)
-2. **🔧 Setup**: `make dev-setup`
-3. **✅ Test**: `make test`
-4. **🎯 Code**: Follow our style guide
-5. **📤 Submit**: Create a pull request
-
-### **Quick Contribution Commands**
-```bash
-make format        # Format code
-make lint          # Check code quality  
-make test          # Run all tests
-make ci            # Run full CI pipeline
-```
-
-📖 **Detailed guide**: [Development Guide → Contributing](docs/DEVELOPMENT.md#contributing)
+- **[data_testing.ipynb](monitoring/data_testing.ipynb)**: Ground-truth dataset for monitoring
 
 ---
 
@@ -233,14 +194,16 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🙏 **Acknowledgments**
 
 - **GTZAN Dataset**: George Tzanetakis for the foundational music genre dataset
-- **MLOps Community**: For inspiring production-ready ML practices
+- **Alexey Grigorev**: for the creation and supervision of these ML & MLOps Zoomcamp without which this project would not have been possible. I would like to thank him as well for all his valuable teaching and support.
+- **MLOps Zoomcamp Community**: For inspiring production-ready ML practices
 - **Open Source Libraries**: TensorFlow, MLflow, Prefect, Evidently, and more
 
 ---
 
-## 📞 **Support & Community**
+## 📞 **Support, Contribution & Community**
 
 - **🐛 Issues**: [GitHub Issues](https://github.com/arsonor/music-genre-classification-with-deep-learning/issues)
+- **📤 Submit**: [Create a pull request](https://github.com/arsonor/music-genre-classification-with-deep-learning/pulls)
 - **📧 Contact**: [Linkedin](https://www.linkedin.com/in/martindornic/)
 - **📖 Wiki**: [Project Wiki](https://github.com/arsonor/music-genre-classification-with-deep-learning/wiki)
 
@@ -248,5 +211,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 <p align="center">
   <strong>🎵 Ready to classify some music? </strong><br>
-  <a href="docs/QUICK_START.md">Get Started in 5 Minutes →</a>
+  <a href="docs/TEST_RUN.md">Get Started here →</a>
 </p>

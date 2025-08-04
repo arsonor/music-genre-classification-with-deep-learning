@@ -37,7 +37,7 @@ cd music-genre-classification-with-deep-learning
   venv\Scripts\activate
   ```
 
-### 2️⃣ Complete Development Setup
+### 2️⃣ Complete Development Setup 
 ```bash
 # Option A: Using Makefile (recommended)
 make dev-setup
@@ -52,32 +52,7 @@ This will:
 - ✅ Validate the environment
 - ✅ Create necessary directories
 
-## Running
 
-### 🐳 Start All Services (Docker)
-```bash
-# Option A: Using Makefile
-make docker-up
-
-# Option B: Direct Docker Compose
-docker-compose up --build -d
-```
-
-This starts:
-- **🎵 API Service** (Flask + Nginx) on port 80
-- **🔬 MLflow** tracking server on port 5000
-- **🌊 Prefect** workflow server on port 4200
-- **📊 Grafana** monitoring on port 3000
-- **📈 Prometheus** metrics on port 9091
-
-### ⏱️ Wait for Services
-```bash
-# Check service status
-docker-compose ps
-
-# Watch logs (optional)
-make docker-logs
-```
 
 ## Testing
 
@@ -185,57 +160,10 @@ make test
 make test-coverage
 ```
 
-## Accessing Services
 
-Once everything is running, access these services in your browser:
 
-| Service | URL | Credentials | Description |
-|---------|-----|-------------|-------------|
-| **🎵 API** | http://localhost | - | Main prediction endpoint |
-| **🔬 MLflow** | http://localhost:5000 | - | Model registry & experiments |
-| **🌊 Prefect** | http://localhost:4200 | - | Workflow orchestration |
-| **📊 Grafana** | http://localhost:3000 | admin/admin | Monitoring dashboards |
-| **📈 Prometheus** | http://localhost:9091 | - | Metrics collection |
 
-## Quick API Examples
 
-### Basic Prediction
-```bash
-# Test with sample audio files
-curl -X POST -F "file=@test/jazz.00000.wav" http://localhost/predict
-curl -X POST -F "file=@test/rock.00000.wav" http://localhost/predict
-curl -X POST -F "file=@test/classical.00000.wav" http://localhost/predict
-```
-
-### Prediction with Ground Truth (for monitoring)
-```bash
-curl -X POST \
-  -F "file=@test/blues.00000.wav" \
-  -F "actual_genre=blues" \
-  http://localhost/predict
-```
-
-### Using Python Requests
-```python
-import requests
-
-# Simple prediction
-with open('test/jazz.00000.wav', 'rb') as f:
-    response = requests.post(
-        'http://localhost/predict',
-        files={'file': f}
-    )
-    result = response.json()
-    print(f"Predicted genre: {result['predicted_genre']}")
-
-# With actual genre for monitoring
-with open('test/blues.00000.wav', 'rb') as f:
-    response = requests.post(
-        'http://localhost/predict',
-        files={'file': f},
-        data={'actual_genre': 'blues'}
-    )
-```
 
 ## 🚀 **How to Run (with Docker Compose)**
 
@@ -261,6 +189,41 @@ graph TB
     Trigger[Webhook Trigger :5080] --> Prefect
 ```
 
+## Running
+
+### 🐳 Start All Services (Docker)
+```bash
+# Option A: Using Makefile
+make docker-up
+
+# Option B: Direct Docker Compose
+docker-compose up --build -d
+```
+
+This starts:
+- **🎵 API Service** (Flask + Nginx) on port 80
+- **🔬 MLflow** tracking server on port 5000
+- **🌊 Prefect** workflow server on port 4200
+- **📊 Grafana** monitoring on port 3000
+- **📈 Prometheus** metrics on port 9091
+
+### **4️⃣ Access Services**
+- **🎵 API**: http://localhost (Nginx reverse proxy)
+- **🔬 MLflow**: http://localhost:5000 (Experiment tracking)
+- **🌊 Prefect**: http://localhost:4200 (Workflow orchestration)  
+- **📊 Grafana**: http://localhost:3000 (Monitoring dashboards)
+- **🔥 Prometheus**: http://localhost:9091 (Metrics collection)
+
+
+### ⏱️ Wait for Services
+```bash
+# Check service status
+docker-compose ps
+
+# Watch logs (optional)
+make docker-logs
+```
+
 ### **🚀 Starting Services**
 
 ```bash
@@ -278,6 +241,19 @@ make docker-logs
 # Check service status
 docker-compose ps
 ```
+
+## Accessing Services
+
+Once everything is running, access these services in your browser:
+
+| Service | URL | Credentials | Description |
+|---------|-----|-------------|-------------|
+| **🎵 API** | http://localhost | - | Main prediction endpoint |
+| **🔬 MLflow** | http://localhost:5000 | - | Model registry & experiments |
+| **🌊 Prefect** | http://localhost:4200 | - | Workflow orchestration |
+| **📊 Grafana** | http://localhost:3000 | admin/admin | Monitoring dashboards |
+| **📈 Prometheus** | http://localhost:9091 | - | Metrics collection |
+
 
 ### **🔧 Service Configuration**
 
@@ -432,8 +408,7 @@ Now that you have the system running:
 1. **📖 Learn the Architecture**: [Architecture Guide](ARCHITECTURE.md)
 2. **🔄 Explore the API**: [API Documentation](API.md)
 3. **📊 Set Up Monitoring**: [Monitoring Guide](MONITORING.md)
-4. **🛠️ Start Developing**: [Development Guide](DEVELOPMENT.md)
-5. **🌊 Understand Training**: [Training Pipeline](TRAINING.md)
+4. **🌊 Understand Training**: [Training Pipeline](TRAINING.md)
 
 ## Development Workflow
 

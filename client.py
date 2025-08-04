@@ -10,7 +10,7 @@ def auto_detect_genre(file_path: str) -> str:
         return filename.split(".")[0]
     return ""
 
-def send_file(url: str, file_path: str, genre: str = "") -> dict:
+def send_file(url: str, file_path: str, genre: str = "", timeout: int = 30) -> dict:
     """Send a single file to the API and return prediction."""
     with open(file_path, "rb") as file:
         files = {"file": (os.path.basename(file_path), file, "audio/wav")}
@@ -19,7 +19,7 @@ def send_file(url: str, file_path: str, genre: str = "") -> dict:
             data["actual_genre"] = genre
 
         try:
-            response = requests.post(url, files=files, data=data, timeout=30)
+            response = requests.post(url, files=files, data=data, timeout=timeout)
         except requests.exceptions.RequestException as e:
             return {"error": str(e)}
 
@@ -55,6 +55,12 @@ def main():
         default="",
         help="Actual genre label (optional). If not provided, tries to detect from filename."
     )
+    parser.add_argument(
+        "--timeout",
+        type=int,
+        default=30,
+        help="Request timeout in seconds (default: 60). Use 60+ for first prediction (cold start)."
+    )
     args = parser.parse_args()
 
     # Prepare list of files
@@ -75,7 +81,7 @@ def main():
 
     # Process files
     results = []
-    for file_path in files_to_send:
+    for i, file_path in enumerate(files_to_send):
         # Determine genre
         genre = args.genre.strip()
         if not genre:
@@ -85,9 +91,13 @@ def main():
             else:
                 print(f"[INFO] No genre detected for '{os.path.basename(file_path)}'.")
 
+        # For first request, give extra info about cold start
+        if i == 0 and len(files_to_send) > 1:
+            print(f"[INFO] First request may take longer (cold start - model loading)...")
+
         # Send file to API
         print(f"[INFO] Sending file: {file_path}")
-        result = send_file(args.url, file_path, genre)
+        result = send_file(args.url, file_path, genre, args.timeout)
         if "error" in result:
             print(f"  [ERROR] {result['error']}")
         else:
