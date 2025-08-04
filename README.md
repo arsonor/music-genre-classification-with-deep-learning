@@ -4,11 +4,11 @@
   <img src="images/music-genre-classification-project.png" alt="Music Genre Classification Project">
 </p>
 
-## Context
+## **Context**
 
 Music genre classification is a challenging task in machine learning, as it requires analyzing complex audio data and identifying patterns unique to specific genres. With the rise of digital music platforms, automating this classification has become increasingly important for organizing, recommending, and retrieving music effectively.
 
-## Practical Applications
+## **Practical Applications**
 
 - Automated music organization and tagging.
 
