@@ -203,14 +203,6 @@ clean-all: clean docker-clean ## Deep clean including Docker resources
 	@rm -rf .prefect/
 	@echo "✅ Deep cleanup completed"
 
-# CI/CD Commands
-ci: lint test ## Run CI pipeline (linting + tests)
-	@echo "🚀 Running CI pipeline..."
-	@echo "✅ CI pipeline completed successfully"
-
-ci-coverage: lint test-coverage ## Run CI pipeline with coverage
-	@echo "🚀 Running CI pipeline with coverage..."
-	@echo "✅ CI pipeline with coverage completed successfully"
 
 # Quick Start Commands
 dev-setup: install pre-commit-install ## Complete development setup
@@ -221,8 +213,7 @@ dev-setup: install pre-commit-install ## Complete development setup
 	@echo "  make run-local     # Start local server"
 	@echo "  make docker-up     # Start with Docker"
 
-quick-test: format-quick test-unit ## Quick development test cycle
-	@echo "⚡ Quick development test cycle completed!"
+
 
 # Status Commands
 status: ## Show project status and service health
@@ -233,7 +224,7 @@ status: ## Show project status and service health
 	@docker-compose ps 2>/dev/null || echo "Docker Compose not running"
 	@echo ""
 	@echo "📁 Project Structure:"
-	@ls -la | grep "^d" | awk '{print "  " $$9}' | grep -v "^\.$" | head -10
+	@ls -la
 	@echo ""
 	@echo "🔍 Available make targets:"
 	@echo "  make help          # Show all available commands"
