@@ -149,18 +149,28 @@ music-genre-classification/
 
 ## **Conclusion & future improvements**
 
+### MLOps Architecture
+This project implements a production-ready MLOps pipeline featuring containerized microservices with Flask API, Nginx reverse proxy, and comprehensive monitoring through Prometheus and Grafana. The architecture leverages Prefect for workflow orchestration, MLflow for experiment tracking and model registry, and Evidently for model drift detection. Key strengths include automated CI/CD pipelines, real-time monitoring, and scalable containerized deployment.
+
+**Future MLOps improvements:**
+* Complete Prefect flow integration from raw data ingestion to model deployment
+* Automated hyperparameter optimization workflows with CI integration
+* Enhanced data source diversity for improved Evidently monitoring metrics
+* Cloud-native streaming deployment infrastructure
+* Continuous deployment automation through Prefect scheduling
+
+### ML Model Development
 This project demonstrates the application of a Convolutional Neural Network (CNN) for music genre classification using the GTZAN dataset. The relatively high accuracy achieved (> 75% on validation and test sets) highlights the strength of CNNs in extracting and leveraging audio features like MFCCs for genre prediction.
 
 However, while the GTZAN dataset has been foundational in advancing music genre classification, it's essential to be aware of its limitations (limited diversity, quality issues, overuse and overfitting). Researchers and developers often use additional or alternative datasets to achieve more robust and generalizable results.
 
-Future improvements could focus on:
+**Future model improvements:**
+* Data Augmentation: Enhancing the dataset with techniques like pitch shifting, time stretching, or adding noise to increase diversity
+* Advanced Architectures: Exploring models like spectrogram-based transformers or hybrid CNN-RNN architectures for improved feature extraction and temporal modeling
+* Dataset Quality: Leveraging larger, more diverse, and well-labeled datasets to enhance robustness
+* Feature Engineering: Experimenting with additional audio features beyond MFCCs, such as chroma features or spectral contrast
 
-- Data Augmentation: Enhancing the dataset with techniques like pitch shifting, time stretching, or adding noise to increase diversity.
-- Advanced Architectures: Exploring models like spectrogram-based transformers or hybrid CNN-RNN architectures for improved feature extraction and temporal modeling.
-- Dataset Quality: Leveraging larger, more diverse, and well-labeled datasets to enhance robustness.
-- Feature Engineering: Experimenting with additional audio features beyond MFCCs, such as chroma features or spectral contrast.
-
-This project provides a solid foundation for music genre classification while acknowledging opportunities for refinement and further exploration.
+This project provides a comprehensive MLOps template demonstrating industry best practices for machine learning systems in production, serving as a solid foundation for music genre classification while acknowledging opportunities for refinement and further exploration.
 
 
 
