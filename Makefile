@@ -179,9 +179,14 @@ prefect-up: ## Start Prefect server and worker
 prefect-ui: ## Open Prefect UI (requires prefect to be running)
 	@echo "🌊 Prefect UI available at: http://localhost:4200"
 
+prefect-deploy: ## Start Prefect deploy flows
+	@docker exec -it prefect-worker prefect deploy --all
+	@echo "✅ Prefect deployment ready!"
+
 # Grafana Commands
 grafana-ui: ## Open Grafana UI (requires monitoring to be running)
 	@echo "📊 Grafana UI available at: http://localhost:3000 (admin/admin)"
+
 
 # Cleanup Commands
 clean: ## Clean up temporary files and artifacts

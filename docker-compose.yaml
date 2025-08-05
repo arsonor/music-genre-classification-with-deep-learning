@@ -107,7 +107,7 @@ services:
     environment:
       - PREFECT_API_URL=http://prefect-server:4200/api
       - PREFECT_FLOW_NAME=retrain_model
-      - PREFECT_DEPLOYMENT_ID=<YOUR_DEPLOYMENT_ID>
+      - PREFECT_DEPLOYMENT_ID=edf5202f-d8b6-4145-bc05-e75e15ff0417
     ports:
       - "5080:5080"
     depends_on:
