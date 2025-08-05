@@ -257,15 +257,74 @@ make clean-all
 ## **Training a New Model**
 
 ### Trigger Training Pipeline
+1. After Docker services are ready (wait until 'default-agent-pool' worker pool is created):
+```
+prefect-server    | 
+prefect-server    |  ___ ___ ___ ___ ___ ___ _____ 
+prefect-server    | | _ \ _ \ __| __| __/ __|_   _| 
+prefect-server    | |  _/   / _|| _|| _| (__  | |  
+prefect-server    | |_| |_|_\___|_| |___\___| |_|  
+prefect-server    | 
+prefect-server    | Configure Prefect to communicate with the server with:
+prefect-server    | 
+prefect-server    |     prefect config set PREFECT_API_URL=http://0.0.0.0:4200/api
+prefect-server    | 
+prefect-server    | View the API reference documentation at http://0.0.0.0:4200/docs
+prefect-server    | 
+prefect-server    | Check out the dashboard at http://0.0.0.0:4200
+prefect-server    | 
+prefect-server    | 
+prefect-server    | 
+prefect-worker    | Work pool 'default-agent-pool' does not exist and no worker type was provided. 
+prefect-worker    | Starting a process worker...
+prefect-worker    | Worker 'ProcessWorker 5f2c94c5-43de-4da1-9089-cd8b34966098' started!
+prefect-worker    | 10:55:07.826 | INFO    | prefect.worker.process.processworker 5f2c94c5-43de-4da1-9089-cd8b34966098 - Work pool 'default-agent-pool' created.
+```
+
+2. Run on a new terminal:
+```bash
+docker exec -it prefect-worker prefect deploy --all
+
+# Or with Makefile:
+make prefect-deploy
+```
+
+3. Answer a few questions (type n) until the deployment flow is ready to be executed.
+
+4. Start a deployment run:
+
 ```bash
 # Option A: Using Prefect UI
 # 1. Go to http://localhost:4200
 # 2. Navigate to Deployments
 # 3. Run "music_genre_deployment"
 
-# Option B: Command line (if deployment exists)
+# Option B: Command line
 prefect deployment run music-genre-pipeline/music_genre_deployment
 ```
+
+5. Follow the progression and the finish state:
+  - in the prefect UI
+  <p align="center">
+    <img src="../images/prefect-flow-run.png" alt="Prefect Flow">
+  </p>
+
+  - via Docker logs
+  ```
+  > Running set_working_directory step...
+prefect-worker    | Data found at: /app/classifier/data/data_10.npz
+prefect-worker    | Extracted: X (9986, 130, 13), y (9986,)
+prefect-worker    | Data validation complete: 9986 samples, (130, 13) feature shape
+prefect-worker    | Labels shape: (9986,)
+prefect-worker    | Loaded X:(9986, 130, 13, 1), y:(9986,)
+prefect-worker    | Epoch 1/15
+...
+...
+prefect-worker    | 11:02:36.923 | INFO    | Flow run 'acrid-terrier' - Finished in state Completed('All states completed.')
+prefect-worker    | Training history saved to: training_history.png
+prefect-worker    | Model registered. Test accuracy: 0.7538
+prefect-worker    | 🏃 View run classy-slug-117 at: http://mlflow:5000/#/experiments/600034235867502708/runs/47f0141f40364182be89497eb4d90b04
+  ```
 
 ### Local Training (Development)
 ```bash

@@ -45,7 +45,9 @@ def trigger_prefect_flow():
     """
     # Call Prefect Deployment to trigger the flow
     # Replace with your deployment ID or use the name+version API
-    deployment_id = os.getenv("PREFECT_DEPLOYMENT_ID", "edf5202f-d8b6-4145-bc05-e75e15ff0417")
+    deployment_id = os.getenv(
+        "PREFECT_DEPLOYMENT_ID", "edf5202f-d8b6-4145-bc05-e75e15ff0417"
+    )
 
     try:
         response = requests.post(

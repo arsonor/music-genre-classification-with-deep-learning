@@ -121,13 +121,26 @@ def music_genre_pipeline():
     return training_results
 ```
 
-**Manual Triggers**:
+**Start a prefect deployment**:
+1. Run on a new terminal:
 ```bash
-# Deploy pipeline to Prefect server
-prefect deployment build classifier/prefect_flow.py:music_genre_pipeline -n "music_genre_deployment"
-prefect deployment apply music_genre_deployment-deployment.yaml
+docker exec -it prefect-worker prefect deploy --all
 
-# Run pipeline manually
+# Or with Makefile:
+make prefect-deploy
+```
+
+2. Answer a few questions (type n) until the deployment flow is ready to be executed.
+
+3. Start a deployment run:
+
+```bash
+# Option A: Using Prefect UI
+# 1. Go to http://localhost:4200
+# 2. Navigate to Deployments
+# 3. Run "music_genre_deployment"
+
+# Option B: Command line
 prefect deployment run music-genre-pipeline/music_genre_deployment
 ```
 
