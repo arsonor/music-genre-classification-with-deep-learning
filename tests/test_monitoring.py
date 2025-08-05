@@ -107,7 +107,9 @@ class TestMonitoringEndpoint:
     def test_metrics_endpoint_missing_reference_file(self, client):
         """Test /metrics endpoint when reference file is missing."""
         with patch("run_monitoring.os.path.exists") as mock_exists:
-            mock_exists.side_effect = lambda path: path != "monitoring/data/reference.parquet"
+            mock_exists.side_effect = (
+                lambda path: path != "monitoring/data/reference.parquet"
+            )
 
             response = client.get("/metrics")
 
@@ -118,7 +120,9 @@ class TestMonitoringEndpoint:
     def test_metrics_endpoint_missing_current_file(self, client):
         """Test /metrics endpoint when current file is missing."""
         with patch("run_monitoring.os.path.exists") as mock_exists:
-            mock_exists.side_effect = lambda path: path != "monitoring/data/current.parquet"
+            mock_exists.side_effect = (
+                lambda path: path != "monitoring/data/current.parquet"
+            )
 
             response = client.get("/metrics")
 
