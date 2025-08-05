@@ -246,8 +246,14 @@ make clean-all
 ### View Predictions in Grafana
 1. Go to http://localhost:3000
 2. Login with `admin/admin`
-3. Navigate to the "Model Performance" dashboard
+3. Navigate to the "Evidently Monitoring Dashboard"
 4. Make some predictions and watch the metrics update in real-time
+
+<p align="center">
+  <img src="../images/grafana-dashboard.png" alt="Grafana Dashboard">
+</p>
+
+For more details, go to: [Monitoring Guide](MONITORING.md)
 
 ### Check MLflow Experiments
 1. Go to http://localhost:5000
