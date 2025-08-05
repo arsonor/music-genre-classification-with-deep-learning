@@ -52,6 +52,7 @@ This project serves as a **comprehensive MLOps template** demonstrating industry
 | **[📊 Monitoring Guide](docs/MONITORING.md)** | Model monitoring and observability | [Dashboard](docs/MONITORING.md#-grafana-dashboard) • [Alerts](docs/MONITORING.md#-intelligent-alerting-system) • [Metrics](docs/MONITORING.md#monitored-features) |
 | **[🌊 Training Pipeline](docs/TRAINING.md)** | ML pipeline and experiment management | [Prefect](docs/TRAINING.md#-prefect-workflow-orchestration) • [MLflow](docs/TRAINING.md#-mlflow-experiment-tracking) • [Automation](docs/TRAINING.md#-pipeline-triggers) |
 | **[🛠️ Model Development Guide](docs/MODEL_DEV.md)** | From raw audio dataset to a deep learning model | [Dataset](docs/MODEL_DEV.md#dataset-description) • [Architecture](docs/MODEL_DEV.md#-model-architecture) • [Notebooks](docs/MODEL_DEV.md#notebooks) |
+| **[🔬 CI/CD pipeline](docs/CI_CD.md)** | Continuous Integration workflow | [Jobs](docs/CI_CD.md#job-details) |
 
 ---
 
