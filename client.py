@@ -10,7 +10,7 @@ def auto_detect_genre(file_path: str) -> str:
         return filename.split(".")[0]
     return ""
 
-def send_file(url: str, file_path: str, genre: str = "", timeout: int = 30) -> dict:
+def send_file(url: str, file_path: str, genre: str = "", timeout: int = 60) -> dict:
     """Send a single file to the API and return prediction."""
     with open(file_path, "rb") as file:
         files = {"file": (os.path.basename(file_path), file, "audio/wav")}
