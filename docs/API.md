@@ -25,27 +25,50 @@ sequenceDiagram
 
 ### **🎵 API Endpoints**
 
-**POST `/predict`**
-- **Input**: Audio file (WAV format recommended)
-- **Optional**: `actual_genre` parameter for monitoring
-- **Output**: JSON with predicted genre
-- **Features**: MFCC extraction, model inference, data logging
+#### **Basic Command Structure**
+
+The `client.py` script is a command-line tool for testing the audio genre prediction API. Here's how to use it:
+
+**Required Parameter:**
+
+- `--file`: Path to an audio file or folder containing audio files
+
+**Optional Parameters:**
+
+- `--url`: API endpoint URL (default: http://127.0.0.1:80/predict)
+- `--genre`: Actual genre label for comparison (optional, it's detected if explicit in the file name)
+
+#### **Command Examples**
+1. Test a Single Audio File
 
 ```bash
-# Example requests
-curl -X POST -F "file=@test/blues.00000.wav" http://localhost/predict
-
-# With actual genre for monitoring
-curl -X POST \
-  -F "file=@test/jazz.00000.wav" \
-  -F "actual_genre=jazz" \
-  http://localhost/predict
-
-# Response format
-{
-  "predicted_genre": "blues"
-}
+python client.py --file test/blues.00000.wav
 ```
+
+2. Test Multiple Files in a Folder
+```bash
+python client.py --file audio_files_test/
+
+# Or with Makefile:
+make run-client
+```
+
+3. Complete Example with All Parameters
+```bash
+python client.py --url http://127.0.0.1:80/predict --file audio_files_test/blues.00000.wav --genre blues
+```
+
+#### **Sample Output**
+```
+[INFO] Auto-detected genre for 'blues.00000.wav': 'blues'
+[INFO] Sending file: test/blues.00000.wav
+  [RESULT] Predicted genre: blues
+
+=== Summary ===
+blues.00000.wav | Actual: blues | Predicted: blues
+```
+
+The script is designed to work with the music genre classification API and supports both single-file testing and batch processing of entire directories.
 
 ### **🧠 Model Loading Strategy**
 
