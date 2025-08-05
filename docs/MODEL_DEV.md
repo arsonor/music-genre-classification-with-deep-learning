@@ -1,3 +1,4 @@
+# 🛠️ Deep Learning Model Development
 
 The system predicts the genre of a given audio file using deep learning techniques. By leveraging the GTZAN dataset and extracting Mel-Frequency Cepstral Coefficients (MFCC) features, the application processes the input audio and classifies it into one of 10 genres: rock, classical, metal, disco, blues, reggae, country, hiphop, jazz, and pop. The project has employed neural networks (NN) and convolutional neural networks (CNN) to achieve this goal.
 
@@ -30,35 +31,22 @@ Audio features derived from the dataset. Features are computed for both 30-secon
 
 These diverse data formats make the dataset a robust choice for exploring multiple classification approaches. However, in the purpose of this project, I chose to focus only on the audio files in the folder 'genres original'.
 
-The audio files are processed to extract **MFCC features (this audio feature is explained in the [`EDA.ipynb`](notebooks/EDA.ipynb) notebook)** and segment the 30-second audio files into 3-second clips for model training.
+The audio files are processed to extract **MFCC features (this audio feature is explained in the [`EDA.ipynb`](../notebooks/EDA.ipynb) notebook)** and segment the 30-second audio files into 3-second clips for model training.
 
 
 
-## Model Architecture
+## 🧠 **Model Architecture**
 
-### CNN for Audio Classification
-
-Our model is specifically designed for processing MFCC (Mel-Frequency Cepstral Coefficients) features extracted from audio signals.
-
-#### Input Processing
-```python
-# Input shape: (batch_size, time_steps, mfcc_features, channels)
-# Example: (32, 130, 13, 1)
-# - 130 time steps (3-second audio segments)
-# - 13 MFCC coefficients
-# - 1 channel (mono audio)
-```
 ### **Feature Engineering:**
+The model is specifically designed for processing MFCC (Mel-Frequency Cepstral Coefficients) features extracted from audio signals.
 - **MFCC Features**: 13-dimensional Mel-Frequency Cepstral Coefficients
 - **Audio Segmentation**: 30-second clips split into 3-second segments  
 - **Data Augmentation**: Temporal and spectral augmentation techniques
 - **Normalization**: Feature scaling for optimal neural network performance
 
-## 🧠 **Model Architecture**
-
 ### **CNN Architecture for MFCC Feature Classification**
 
-Our model uses a **Convolutional Neural Network (CNN)** optimized for audio feature classification:
+The model uses a **Convolutional Neural Network (CNN)** optimized for audio feature classification:
 
 
 #### Network Architecture
@@ -122,8 +110,6 @@ def build_model(input_shape, l2_reg=0.001, learning_rate=0.001):
 
 
 
-
-
 ### Feature Engineering Pipeline
 
 #### MFCC Extraction Process
@@ -182,11 +168,11 @@ def prepare_training_data(audio_files):
 ## Notebooks
 
 For experiments, I use Jupyter notebooks.
-They are in the [`notebooks`](notebooks/) folder.
+They are in the [`notebooks`](../notebooks/) folder.
 
 ### **1. Exploratory Data Analysis (EDA)**
 
-[`EDA.ipynb`](notebooks/EDA.ipynb)
+[`EDA.ipynb`](../notebooks/EDA.ipynb)
 - Download the dataset from Kaggle.
 
 - Analyze class distribution and dataset balance.
@@ -199,7 +185,7 @@ They are in the [`notebooks`](notebooks/) folder.
 
 ### **2. Data Preparation**
 
-[`data_preparation.ipynb`](notebooks/data_preparation.ipynb)
+[`data_preparation.ipynb`](../notebooks/data_preparation.ipynb)
 
 - Segment each 30-second audio file into 3-second clips.
 
@@ -207,7 +193,7 @@ They are in the [`notebooks`](notebooks/) folder.
 
 ### **3. Model Selection**
 
-[`model_NN_classification.ipynb`](notebooks/model_NN_classification.ipynb)
+[`model_NN_classification.ipynb`](../notebooks/model_NN_classification.ipynb)
 - Experiment with NN and CNN architectures.
 
 - Perform hyperparameter tuning.
