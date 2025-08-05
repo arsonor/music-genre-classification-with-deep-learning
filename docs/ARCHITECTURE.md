@@ -332,7 +332,7 @@ music-genre-classification/
 │   └── prefect.yaml                     # Prefect deployment config
 │
 ├── 📁 monitoring/                       # Model monitoring stack
-│   ├── monitor.py                       # Evidently monitoring service
+│   ├── run_monitoring.py                 # Evidently monitoring service
 │   ├── 📁 grafana/
 │   │   └── provisioning/
 │   │       ├── dashboards/              # Pre-configured dashboards
@@ -372,18 +372,17 @@ music-genre-classification/
 │   ├── data_preparation.ipynb           # Feature engineering experiments
 │   └── model_NN_classification.ipynb    # Model architecture experiments
 │
-├── 📁 test/                             # Sample audio files for testing
+├── 📁 audio_files_test/                 # Sample audio files for testing
 │   ├── blues.00000.wav                  # Sample blues audio
 │   ├── jazz.00000.wav                   # Sample jazz audio
 │   ├── rock.00000.wav                   # Sample rock audio
 │   └── [other_genres].00000.wav         # Additional genre samples
 │
 ├── 📁 docs/                             # Comprehensive documentation
-│   ├── QUICK_START.md                   # Get started in 5 minutes
+│   ├── TEST_RUN.md                      # Test and Run the app
 │   ├── ARCHITECTURE.md                  # This file - system architecture
 │   ├── API.md                           # API reference & examples
-│   ├── DEPLOYMENT.md                    # Production deployment guide
-│   ├── DEVELOPMENT.md                   # Development workflow
+│   ├── MODEL_DEV.md                     # Deep Learning Model Selection
 │   ├── MONITORING.md                    # Monitoring & observability
 │   └── TRAINING.md                      # ML pipeline documentation
 │
@@ -657,6 +656,5 @@ services:
 **🔗 Related Documentation**:
 - [🚀 Quick Start Guide](QUICK_START.md) - Get the system running
 - [🔄 API Documentation](API.md) - API reference and examples
-- [🐳 Deployment Guide](DEPLOYMENT.md) - Production deployment
 - [📊 Monitoring Guide](MONITORING.md) - Observability setup
 - [🌊 Training Pipeline](TRAINING.md) - ML workflow details

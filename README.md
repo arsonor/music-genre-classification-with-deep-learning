@@ -47,11 +47,11 @@ This project serves as a **comprehensive MLOps template** demonstrating industry
 | Document | Description | Quick Links |
 |----------|-------------|-------------|
 | **[🚀 Test & Run Guide](docs/TEST_RUN.md)** | Get up and running in 5 minutes | [Install](docs/QUICK_START.md#installation) • [Run](docs/QUICK_START.md#running) • [Test](docs/QUICK_START.md#testing) |
-| **[🏗️ Architecture Guide](docs/ARCHITECTURE.md)** | Technical architecture and design | [Model](docs/ARCHITECTURE.md#model-architecture) • [Services](docs/ARCHITECTURE.md#service-architecture) • [Data Flow](docs/ARCHITECTURE.md#data-flow) |
+| **[🏗️ Architecture Guide](docs/ARCHITECTURE.md)** | Technical architecture and design | [Structure](docs/ARCHITECTURE.md#project-structure) • [Services](docs/ARCHITECTURE.md#service-architecture) • [Data Flow](docs/ARCHITECTURE.md#data-flow) |
 | **[🔄 API Documentation](docs/API.md)** | Complete API reference and examples | [Endpoints](docs/API.md#endpoints) • [Examples](docs/API.md#examples) • [Integration](docs/API.md#integration) |
 | **[📊 Monitoring Guide](docs/MONITORING.md)** | Model monitoring and observability | [Dashboards](docs/MONITORING.md#dashboards) • [Alerts](docs/MONITORING.md#alerts) • [Metrics](docs/MONITORING.md#metrics) |
 | **[🌊 Training Pipeline](docs/TRAINING.md)** | ML pipeline and experiment management | [Prefect](docs/TRAINING.md#prefect-workflow-orchestration) • [MLflow](docs/TRAINING.md#mlflow-experiment-tracking) • [Automation](docs/TRAINING.md#pipeline-triggers) |
-| **[🛠️ Model Development Guide](docs/MODEL_DEV.md)** | From raw audio dataset to a deep learning model | [Dataset](docs/MODEL_DEV.md#dataset-description) • [Architecture](docs/MODEL_DEV.md#model-architecture) • [Notebooks](docs/MODEL_DEV.md#notebooks) |
+| **[🛠️ Model Development Guide](docs/MODEL_DEV.md)** | From raw audio dataset to a deep learning model | [Dataset](docs/MODEL_DEV.md#dataset-description) • [Architecture](docs/MODEL_DEV.md#-model-architecture) • [Notebooks](docs/MODEL_DEV.md#notebooks) |
 
 ---
 
