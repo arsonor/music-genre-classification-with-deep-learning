@@ -58,7 +58,7 @@ def main():
     parser.add_argument(
         "--timeout",
         type=int,
-        default=30,
+        default=60,
         help="Request timeout in seconds (default: 60). Use 60+ for first prediction (cold start)."
     )
     args = parser.parse_args()
